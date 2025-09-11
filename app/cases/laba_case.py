@@ -61,28 +61,54 @@ class Task2:
     def __str__(self):
         return "Округлити сумнівні цифри числа, залишивши в ньому тільки вірні знаки: а) у вузькому сенсі; б) у широкому сенсі. Визначити абсолютну похибку результату."
 
-#-------------
-def task_1():
-    task1 = Task1()
-    print(task1)
-    print(task1.equation_view_1, task1.equation_view_2)
-    print("Рішення:")
-    print(task1.check_one())
+
+class Task3():
+    operations_interface = Operations()
+    number1_view = "73,065"
+    number2_view = "9,21"
+    number1 = 73.065
+    number2 = 9.21
+    number1_obj = FloatNumber(number=number1)
+    number2_obj = FloatNumber(number=number2)
+
+
+    def get_narrow_form(self) -> tuple:
+        self.number_1_narrow, self.number_2_narrow = self.number1_obj.get_narrow(), self.number2_obj.get_narrow()
+        return [f"{self.number1} -> {self.number_1_narrow}", f"{self.number2} -> {self.number_2_narrow}"]
+
+
+    def get_wide_form(self) -> tuple:
+        self.number_1_wide, self.number_2_wide = self.number1_obj.get_wide(), self.number2_obj.get_wide()
+        return [f"{self.number1} -> {self.number_1_wide}", f"{self.number2} -> {self.number_2_wide}"]
+    
+
+    def get_relative_error(self) -> tuple:
+       try:
+           self.number1_wide_relative = self.operations_interface.relative_error(number=self.number_1_wide)
+           self.number1_narrow_relative = self.operations_interface.relative_error(number=self.number_1_narrow)
+           self.number2_wide_relative = self.operations_interface.relative_error(number=self.number_2_wide)
+           self.number2_narrow_relative = self.operations_interface.relative_error(number=self.number_2_narrow)
+           print("!!")
+           return [f"{self.number_1_wide} -> {self.number1_wide_relative}", f"{self.number_1_narrow} -> {self.number1_narrow_relative}", f"{self.number_2_wide} -> {self.number2_wide_relative}", f"{self.number_2_narrow} -> {self.number2_narrow_relative}"] 
+       except AttributeError as w:
+            print(w)
+
+
+    def get_absolute_error(self) -> tuple:
+       try:
+           self.number1_wide_absolute = self.operations_interface.absolute_error(number=self.number_1_narrow)
+           self.number1_narrow_absolute = self.operations_interface.absolute_error(number=self.number_1_wide)
+           self.number2_wide_absolute = self.operations_interface.absolute_error(number=self.number_2_narrow)
+           self.number2_narrow_absolute = self.operations_interface.absolute_error(number=self.number_2_wide)
+           return [f"{self.number_1_wide} -> {self.number1_wide_absolute}", f"{self.number_1_narrow} -> {self.number1_narrow_absolute}", f"{self.number_2_wide} -> {self.number2_wide_absolute}", f"{self.number_2_narrow} -> {self.number2_narrow_absolute}"]       
+       except AttributeError:
+            print("/")
+
+    
+
+
+    def __str__(self):
+        return "Знайти граничні абсолютні та відносні похибки чисел, якщо вони мають тільки вірні цифри: а) у вузькому сенсі; б) у широкому сенсі."
 
 
 #-------------
-def task_2():
-    task2 = Task2()
-    wide_form = task2.get_wide_form()
-    narrow_form = task2.get_narrow_form()
-    absolute_error = task2.get_absolute_error()
-    print(task2)
-    print(task2.float_number_one_view, ";", task2.float_number_two_view)
-    print("Рішення:")
-    for el in wide_form: print("wide form:", el)
-    for el in narrow_form: print("narrow_form: ", el)
-    for el in absolute_error: print("absolute_error: ", el)
-
-
-if __name__ == "__main__":
-    task_2()  

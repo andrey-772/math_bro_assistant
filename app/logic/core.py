@@ -10,7 +10,18 @@ class Operations:
         return self.delta
 
 
+    def __absolute_error(self, number: float) -> float:
+        s = str(number)
+        if '.' in s:
+            decimal_places = len(s.split('.')[1])  # количество знаков после запятой
+            self.delta = 10 ** (-decimal_places)       # погрешность = 1 последней цифры
+        else:
+            self.delta = 1  # если целое число, последняя цифра единица
+        return self.delta
+
+
     def relative_error(self, number: float) -> float:
+        self.__absolute_error(number)
         return self.delta / abs(number)
 
 
@@ -27,7 +38,7 @@ class Equation:
         
 
 class FloatNumber:
-    def __init__(self, number: float | int, error: float=None):
+    def __init__(self, number: float | int, error: float=0.001):
         self.number = number
         self.error = error
 
