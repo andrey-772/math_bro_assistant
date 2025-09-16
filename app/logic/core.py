@@ -3,26 +3,20 @@ class Operations:
     def absolute_error(self, number: float) -> float:
         s = str(number)
         if '.' in s:
-            decimal_places = len(s.split('.')[1])  # количество знаков после запятой
-            self.delta = 10 ** (-decimal_places)       # погрешность = 1 последней цифры
+            decimal_places = len(s.split('.')[1])  
+            delta = 10 ** (-decimal_places)  
         else:
-            self.delta = 1  # если целое число, последняя цифра единица
-        return self.delta
+            delta = 1 
+        return delta
 
 
-    def __absolute_error(self, number: float) -> float:
-        s = str(number)
-        if '.' in s:
-            decimal_places = len(s.split('.')[1])  # количество знаков после запятой
-            self.delta = 10 ** (-decimal_places)       # погрешность = 1 последней цифры
-        else:
-            self.delta = 1  # если целое число, последняя цифра единица
-        return self.delta
+    def max_absolute_error(self, number: float, max_relative_error) -> float:
+        return number * max_relative_error
 
 
-    def relative_error(self, number: float) -> float:
-        self.__absolute_error(number)
-        return self.delta / abs(number)
+    def max_relative_error(self, number: float, error:float=1.0) -> float:
+        delta = error / abs(number)
+        return delta
 
 
 class Equation:
@@ -38,7 +32,7 @@ class Equation:
         
 
 class FloatNumber:
-    def __init__(self, number: float | int, error: float=0.001):
+    def __init__(self, number: float, error: float=0.001):
         self.number = number
         self.error = error
 

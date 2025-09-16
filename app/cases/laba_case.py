@@ -1,6 +1,4 @@
-﻿### it is a temporary file
-
-from logic.core import (
+﻿from logic.core import (
     Equation,
     FloatNumber,
     Operations
@@ -36,13 +34,23 @@ class Task2:
     number2 = FloatNumber(number=3.064, error=3.064*0.02)
 
 
-    def get_narrow_form(self) -> tuple:
+    def __init__(self):
+        self.__create_narrow_form()
+        self.__create_wide_form()
+
+    def __create_narrow_form(self):
         self.number_1_narrow, self.number_2_narrow = self.number1.get_narrow(), self.number2.get_narrow()
+
+
+    def __create_wide_form(self):
+        self.number_1_wide, self.number_2_wide = self.number1.get_wide(), self.number2.get_wide()
+
+
+    def get_narrow_form(self) -> tuple:
         return [f"{self.float_number_one_view} -> {self.number_1_narrow}", f"{self.float_number_two_view} -> {self.number_2_narrow}"]
 
 
     def get_wide_form(self) -> tuple:
-        self.number_1_wide, self.number_2_wide = self.number1.get_wide(), self.number2.get_wide()
         return [f"{self.float_number_one_view} -> {self.number_1_wide}", f"{self.float_number_two_view} -> {self.number_2_wide}"]
     
 
@@ -55,7 +63,7 @@ class Task2:
                     f"{self.number_2_wide} is {operations.absolute_error(number=self.number_2_wide)}", 
             ]
         except AttributeError:
-            print("/")
+            print("at first call some others methods")
 
 
     def __str__(self):
@@ -70,45 +78,46 @@ class Task3():
     number2 = 9.21
     number1_obj = FloatNumber(number=number1)
     number2_obj = FloatNumber(number=number2)
+    
 
+    def __init__(self):
+        self.__create_narrow_form()
+        self.__create_wide_form()
+
+
+    def __create_narrow_form(self) -> tuple:
+        self.number_1_narrow, self.number_2_narrow = self.number1_obj.get_narrow(), self.number2_obj.get_narrow()
+        
+
+    def __create_wide_form(self) -> tuple:
+        self.number_1_wide, self.number_2_wide = self.number1_obj.get_wide(), self.number2_obj.get_wide()
+    
 
     def get_narrow_form(self) -> tuple:
-        self.number_1_narrow, self.number_2_narrow = self.number1_obj.get_narrow(), self.number2_obj.get_narrow()
         return [f"{self.number1} -> {self.number_1_narrow}", f"{self.number2} -> {self.number_2_narrow}"]
 
 
     def get_wide_form(self) -> tuple:
-        self.number_1_wide, self.number_2_wide = self.number1_obj.get_wide(), self.number2_obj.get_wide()
         return [f"{self.number1} -> {self.number_1_wide}", f"{self.number2} -> {self.number_2_wide}"]
-    
+
 
     def get_relative_error(self) -> tuple:
-       try:
-           self.number1_wide_relative = self.operations_interface.relative_error(number=self.number_1_wide)
-           self.number1_narrow_relative = self.operations_interface.relative_error(number=self.number_1_narrow)
-           self.number2_wide_relative = self.operations_interface.relative_error(number=self.number_2_wide)
-           self.number2_narrow_relative = self.operations_interface.relative_error(number=self.number_2_narrow)
+           self.number1_wide_relative = self.operations_interface.max_relative_error(number=self.number_1_wide)
+           self.number1_narrow_relative = self.operations_interface.max_relative_error(number=self.number_1_narrow)
+           self.number2_wide_relative = self.operations_interface.max_relative_error(number=self.number_2_wide)
+           self.number2_narrow_relative = self.operations_interface.max_relative_error(number=self.number_2_narrow)
            print("!!")
            return [f"{self.number_1_wide} -> {self.number1_wide_relative}", f"{self.number_1_narrow} -> {self.number1_narrow_relative}", f"{self.number_2_wide} -> {self.number2_wide_relative}", f"{self.number_2_narrow} -> {self.number2_narrow_relative}"] 
-       except AttributeError as w:
-            print(w)
 
 
     def get_absolute_error(self) -> tuple:
-       try:
-           self.number1_wide_absolute = self.operations_interface.absolute_error(number=self.number_1_narrow)
-           self.number1_narrow_absolute = self.operations_interface.absolute_error(number=self.number_1_wide)
-           self.number2_wide_absolute = self.operations_interface.absolute_error(number=self.number_2_narrow)
-           self.number2_narrow_absolute = self.operations_interface.absolute_error(number=self.number_2_wide)
+           self.number1_wide_absolute = self.operations_interface.max_absolute_error(number=self.number_1_narrow, max_relative_error=self.number1_wide_relative)
+           self.number1_narrow_absolute = self.operations_interface.max_absolute_error(number=self.number_1_wide, max_relative_error=self.number1_narrow_relative)
+           self.number2_wide_absolute = self.operations_interface.max_absolute_error(number=self.number_2_narrow, max_relative_error=self.number2_wide_relative)
+           self.number2_narrow_absolute = self.operations_interface.max_absolute_error(number=self.number_2_wide, max_relative_error=self.number2_narrow_relative)
            return [f"{self.number_1_wide} -> {self.number1_wide_absolute}", f"{self.number_1_narrow} -> {self.number1_narrow_absolute}", f"{self.number_2_wide} -> {self.number2_wide_absolute}", f"{self.number_2_narrow} -> {self.number2_narrow_absolute}"]       
-       except AttributeError:
-            print("/")
 
-    
-
-
+   
     def __str__(self):
         return "Знайти граничні абсолютні та відносні похибки чисел, якщо вони мають тільки вірні цифри: а) у вузькому сенсі; б) у широкому сенсі."
 
-
-#-------------
