@@ -21,14 +21,83 @@
             </div>
         </header>
     </div>
-    <div class="container generate-the-matrix-block top-frame">
+    <div class="container generate-the-matrix-block">
         <div class="container text-center">
             <h1>Generate the matrix table !</h1>
         </div>
-        <div class="row generate-the-matrix-block-table">
-
+        <div class="generate-the-matrix-block-table">
+            <div class="row generate-the-matrix-block-table-row">
+                <div class="col border ">
+                    <h3>Matrix A</h3>
+                </div>
+                <div class="col border generate-the-matrix-block-table-section">
+                    <h3>Rows: </h3>
+                    <div class="dropdown">
+                        <a class="btn btn-light" id="generate-the-matrix-block-table-section-button-1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            3
+                        </a>
+                        <ul class="dropdown-menu generate-the-matrix-block-table-section-dropdown" id="generate-the-matrix-block-table-section-dropdown1">
+                            <li><a class="dropdown-item" id="generate-the-matrix-block-table-section-button-1-option-1">2</a></li>
+                            <li><a class="dropdown-item active" id="generate-the-matrix-block-table-section-button-1-option-2">3</a></li>
+                            <li><a class="dropdown-item" id="generate-the-matrix-block-table-section-button-1-option-3">4</a></li>
+                            <li><a class="dropdown-item" id="generate-the-matrix-block-table-section-button-1-option-4">5</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col border generate-the-matrix-block-table-section">
+                    <h3>Columns: </h3>
+                    <div class="dropdown">
+                        <a class="btn btn-light" id="generate-the-matrix-block-table-section-button-2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            3
+                        </a>
+                        <ul class="dropdown-menu generate-the-matrix-block-table-section-dropdown"  id="generate-the-matrix-block-table-section-dropdown2">
+                            <li><a class="dropdown-item" id="generate-the-matrix-block-table-section-button-2-option-1">2</a></li>
+                            <li><a class="dropdown-item active" id="generate-the-matrix-block-table-section-button-2-option-2">3</a></li>
+                            <li><a class="dropdown-item" id="generate-the-matrix-block-table-section-button-2-option-3">4</a></li>
+                            <li><a class="dropdown-item" id="generate-the-matrix-block-table-section-button-2-option-4">5</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row generate-the-matrix-block-table-row">
+                <div class="col border ">
+                    <h3>Matrix B</h3>
+                </div>
+                <div class="col border generate-the-matrix-block-table-section">
+                    <h3>Rows: </h3>
+                    <div class="dropdown">
+                        <a class="btn btn-light generate-the-matrix-block-table-section-button" id="generate-the-matrix-block-table-section-button-3" data-bs-toggle="dropdown" aria-expanded="false">
+                            3
+                        </a>
+                        <ul class="dropdown-menu generate-the-matrix-block-table-section-dropdown" id="generate-the-matrix-block-table-section-dropdown3">
+                            <li><a class="dropdown-item" id="generate-the-matrix-block-table-section-button-3-option-1">2</a></li>
+                            <li><a class="dropdown-item active" id="generate-the-matrix-block-table-section-button-3-option-2">3</a></li>
+                            <li><a class="dropdown-item" id="generate-the-matrix-block-table-section-button-3-option-3">4</a></li>
+                            <li><a class="dropdown-item" id="generate-the-matrix-block-table-section-button-3-option-4">5</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col border generate-the-matrix-block-table-section">
+                    <h3>Columns: </h3>
+                    <div class="dropdown">
+                        <a class="btn btn-light generate-the-matrix-block-table-section-button" id="generate-the-matrix-block-table-section-button-4"  role="button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                            1
+                        </a>
+                        <ul class="dropdown-menu generate-the-matrix-block-table-section-dropdown">
+                            <li><a class="dropdown-item" href="#">2</a></li>
+                            <li><a class="dropdown-item" href="#">3</a></li>
+                            <li><a class="dropdown-item" href="#">4</a></li>
+                            <li><a class="dropdown-item" href="#">5</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container generate-the-matrix-block-button-generate-container">
+            <button class="btn btn-primary generate-the-matrix-block-button-generate">Generate</button>
         </div>
     </div>
+    <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="/static/js/script.js"></script>
 </body>
 </html>

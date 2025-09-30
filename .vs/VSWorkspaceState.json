@@ -1,10 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\app",
-    "\\app\\cases",
-    "\\app\\logic"
+    "\\django_app",
+    "\\django_app\\math_bro_assistant",
+    "\\django_app\\matrix",
+    "\\django_app\\matrix\\templates",
+    "\\django_app\\static",
+    "\\django_app\\static\\css"
   ],
-  "SelectedNode": "\\app\\cases\\laba_case2.py",
+  "SelectedNode": "\\django_app\\matrix\\urls.py",
   "PreviewInSolutionExplorer": false
 }
