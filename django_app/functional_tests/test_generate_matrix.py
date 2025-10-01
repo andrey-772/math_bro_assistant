@@ -1,8 +1,5 @@
-from django.db.models import Q
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from .base import FunctionalTest
-import time
 
 
 class TestGenerateMatrix(FunctionalTest):
@@ -36,6 +33,5 @@ class TestGenerateMatrix(FunctionalTest):
 			self.browser.find_element(By.ID, f"generate-the-matrix-block-table-section-button-2-option-{elem_n}").click()
 			self.assertEqual(element.text, f"{elem_n+1}")
 
-			
-
+	
 	
