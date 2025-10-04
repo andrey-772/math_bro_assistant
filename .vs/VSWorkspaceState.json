@@ -2,12 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\django_app",
-    "\\django_app\\math_bro_assistant",
     "\\django_app\\matrix",
+    "\\django_app\\matrix\\static",
+    "\\django_app\\matrix\\static\\bootstrap",
+    "\\django_app\\matrix\\static\\bootstrap\\js",
+    "\\django_app\\matrix\\static\\css",
+    "\\django_app\\matrix\\static\\js",
     "\\django_app\\matrix\\templates",
-    "\\django_app\\static",
-    "\\django_app\\static\\css"
+    "\\django_app\\matrix\\tests"
   ],
-  "SelectedNode": "\\django_app\\matrix\\urls.py",
+  "SelectedNode": "\\django_app\\matrix\\tests\\test_views.py",
   "PreviewInSolutionExplorer": false
 }

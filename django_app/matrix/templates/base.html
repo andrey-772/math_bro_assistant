@@ -97,7 +97,10 @@
                 <button class="btn btn-primary generate-the-matrix-block-button-generate">Generate</button>
             </div>
     </div>
-    <div></div>
+    <div class="container matrix-table-block">
+        {% block matrix_table %}
+        {% endblock %}
+    </div>
     <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="/static/js/script.js"></script>
 </body>

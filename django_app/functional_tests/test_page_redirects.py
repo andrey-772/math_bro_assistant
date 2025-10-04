@@ -12,4 +12,3 @@ class TestRedirectsWorks(FunctionalTest):
         self.wait_for(lambda: self.assertEqual(logo.text, "Math Assistant"))
         logo.click()
         
-        

@@ -12,3 +12,4 @@ class MartixTableModelTest(TestCase):
         self.assertEqual(matrix_table.column2, "1")
 
 
+
