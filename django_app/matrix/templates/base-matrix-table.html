@@ -1,77 +1,75 @@
 {% extends 'base.html' %}
 
 {% block matrix_table %}
-<div class="row">
+<div class="row container justify-content-center" id="matrix-table-block">
     <div class="column matrix-table-block-block1">
-        <h1>Matrix A</h1>
+        <h1 id="matrix-table-block-block1-name">Matrix A</h1>
         <div class="row">
             <div class="column">
                 {% if column1 == 2 %}
                 {% if row1 == 2 %}
-                { include "includes/templates_matrix_tables/row-column-2-2.html"}
+                {% include "includes/templates_matrix_tables/row-column-2-2.html" %}
                 {% elif row1 == 3 %}
-                { include "includes/templates_matrix_tables/row-column-3-2.html"}
+                {% include "includes/templates_matrix_tables/row-column-3-2.html" %}
                 {% elif row1 == 4 %}
-                { include "includes/templates_matrix_tables/row-column-4-2.html"}
+                {% include "includes/templates_matrix_tables/row-column-4-2.html" %}
                 {% else %}
-                { include "includes/templates_matrix_tables/row-column-5-2.html"}
+                {% include "includes/templates_matrix_tables/row-column-5-2.html" %}
                 {% endif %}
-
-
 
                 {% elif column1 == 3 %}
                 {% if row1 == 2 %}
-                { include "includes/templates_matrix_tables/row-column-2-3.html"}
+                {% include "includes/templates_matrix_tables/row-column-2-3.html" %}
                 {% elif row1 == 3 %}
-                { include "includes/templates_matrix_tables/row-column-3-3.html"}
+                {% include "includes/templates_matrix_tables/row-column-3-3.html" %}
                 {% elif row1 == 4 %}
-                { include "includes/templates_matrix_tables/row-column-4-3.html"}
+                {% include "includes/templates_matrix_tables/row-column-4-3.html" %}
                 {% else %}
-                { include "includes/templates_matrix_tables/row-column-5-3.html"}
+                {% include "includes/templates_matrix_tables/row-column-5-3.html" %}
                 {% endif %}
 
                 {% elif column1 == 4 %}
                 {% if row1 == 2 %}
-                { include "includes/templates_matrix_tables/row-column-2-4.html"}
+                {% include "includes/templates_matrix_tables/row-column-2-4.html" %}
                 {% elif row1 == 3 %}
-                { include "includes/templates_matrix_tables/row-column-3-4.html"}
+                {% include "includes/templates_matrix_tables/row-column-3-4.html" %}
                 {% elif row1 == 4 %}
-                { include "includes/templates_matrix_tables/row-column-4-4.html"}
+                {% include "includes/templates_matrix_tables/row-column-4-4.html" %}
                 {% else %}
-                { include "includes/templates_matrix_tables/row-column-5-4.html"}
+                {% include "includes/templates_matrix_tables/row-column-5-4.html" %}
                 {% endif %}
 
                 {% else %}
                 {% if row1 == 2 %}
-                { include "includes/templates_matrix_tables/row-column-2-5.html"}
+                {% include "includes/templates_matrix_tables/row-column-2-5.html" %}
                 {% elif row1 == 3 %}
-                { include "includes/templates_matrix_tables/row-column-3-5.html"}
+                {% include "includes/templates_matrix_tables/row-column-3-5.html" %}
                 {% elif row1 == 4 %}
-                { include "includes/templates_matrix_tables/row-column-4-5.html"}
+                {% include "includes/templates_matrix_tables/row-column-4-5.html" %}
                 {% else %}
-                { include "includes/templates_matrix_tables/row-column-5-5.html"}
+                {% include "includes/templates_matrix_tables/row-column-5-5.html" %}
                 {% endif %}
                 {% endif %}
             </div>
-
         </div>
     </div>
+
     <div class="column matrix-table-block-block2">
-        <h1>Matrix B</h1>
+        <h1 id="matrix-table-block-block2-name">Matrix B</h1>
         <div class="row">
             <div class="column">
                 {% if row1 == 2 %}
-                { include "includes/templates_matrix_tables/row-column-2-1.html"}
+                {% include "includes/templates_matrix_tables/row-column-2-1.html" %}
                 {% elif row1 == 3 %}
-                { include "includes/templates_matrix_tables/row-column-3-1.html"}
+                {% include "includes/templates_matrix_tables/row-column-3-1.html" %}
                 {% elif row1 == 4 %}
-                { include "includes/templates_matrix_tables/row-column-4-1.html"}
+                {% include "includes/templates_matrix_tables/row-column-4-1.html" %}
                 {% else %}
-                { include "includes/templates_matrix_tables/row-column-5-1.html"}
+                {% include "includes/templates_matrix_tables/row-column-5-1.html" %}
                 {% endif %}
             </div>
-
         </div>
     </div>
 </div>
+
 {% endblock %}
