@@ -13,7 +13,6 @@ def matrix_table(request):
     context = {"row1": 3, "column1": 3, "row2": 3, "column2": 1}
     if request.method == "POST":
         data = json.loads(request.body)
-        print(data.get("row1"), "data.get('row1')")
         context["row1"] = int(data.get("row1"))
         context["column1"] = int(data.get("column1"))
         context["row2"] = int(data.get("row2"))

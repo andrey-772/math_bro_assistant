@@ -6,10 +6,11 @@ from django.test import TestCase
 class MartixTableModelTest(TestCase):
     def test_default_values(self):
         matrix_table = MatrixTable()
-        self.assertEqual(matrix_table.row1, "3") 
-        self.assertEqual(matrix_table.column1, "3") 
-        self.assertEqual(matrix_table.row2, "3") 
-        self.assertEqual(matrix_table.column2, "1")
+        for field in MatrixTable._meta.fields:
+            if field.name == "id":
+                continue
+            value = getattr(matrix_table, field.name)
+            self.assertEqual(value, 0)
 
 
 

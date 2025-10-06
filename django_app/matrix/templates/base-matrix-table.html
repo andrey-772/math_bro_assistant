@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block matrix_table %}
-<div class="row container justify-content-center" id="matrix-table-block">
-    <div class="column matrix-table-block-block1">
-        <h1 id="matrix-table-block-block1-name">Matrix A</h1>
-        <div class="row">
-            <div class="column">
-                <form>
+<form method="post" action="/solve_matrix_system_by_simple_iteration_method/">
+    <div class="row container justify-content-center" id="matrix-table-block">
+        <div class="column matrix-table-block-block1">
+            <h1 id="matrix-table-block-block1-name">Matrix A</h1>
+            <div class="row">
+                <div class="column">
                     {% if column1 == 2 %}
                     {% if row1 == 2 %}
                     {% include "includes/templates_matrix_tables/row-column-2-2.html" %}
@@ -51,16 +51,14 @@
                     {% include "includes/templates_matrix_tables/row-column-5-5.html" %}
                     {% endif %}
                     {% endif %}
-                </form>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="column matrix-table-block-block2">
-        <h1 id="matrix-table-block-block2-name">Matrix B</h1>
-        <div class="row">
-            <div class="column">
-                <form>
+        <div class="column matrix-table-block-block2">
+            <h1 id="matrix-table-block-block2-name">Matrix B</h1>
+            <div class="row">
+                <div class="column">
                     {% if row1 == 2 %}
                     {% include "includes/templates_matrix_tables/row-column-2-1.html" %}
                     {% elif row1 == 3 %}
@@ -70,10 +68,17 @@
                     {% else %}
                     {% include "includes/templates_matrix_tables/row-column-5-1.html" %}
                     {% endif %}
-                </form>
+                </div>
             </div>
         </div>
+
+        <div class="container matrix-table-block-submit-button-container">
+            <input class="btn btn-primary matrix-table-block-submit-button" type="submit" value="Calculate by simple iteration method " />
+        </div>
     </div>
-</div>
+</form>
+
+
+
 
 {% endblock %}
