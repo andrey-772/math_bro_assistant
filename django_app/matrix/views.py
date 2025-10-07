@@ -17,5 +17,4 @@ def matrix_table(request):
         context["column1"] = int(data.get("column1"))
         context["row2"] = int(data.get("row2"))
         context["column2"] = int(data.get("column2"))
-        MatrixTable.objects.create(row1=context["row1"], column1=context["column1"], row2=context["row2"], column2=context["column2"])
     return render(request, "base-matrix-table.html", context)
