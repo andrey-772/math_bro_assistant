@@ -1,1 +1,4 @@
-.vs 
+.vs/
+__pycache__/
+*.pyc
+*.sqlite 
