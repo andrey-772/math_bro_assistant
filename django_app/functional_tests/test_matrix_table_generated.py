@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
 
+
 class TestMatrixTableGenerated(FunctionalTest):
     def test_matrix_table_elements_in_place(self):
         self.browser.get(self.live_server_url)
