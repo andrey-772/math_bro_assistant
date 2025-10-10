@@ -1,7 +1,6 @@
 from .base import FunctionalTest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-import time
 
 
 class TestMatrixTableGenerated(FunctionalTest):
@@ -21,36 +20,34 @@ class TestMatrixTableGenerated(FunctionalTest):
             elem_n = i -1
 
 
-            self.__generate_matrix(elem_n)
-
-            self.browser.find_element(By.CLASS_NAME, "generate-the-matrix-block-button-generate").click()
+            self.generate_matrix(elem_n=elem_n, elem_n2=elem_n)
 
             if amount_of_rows1 == 2:
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table22-row1-column1")), 1)
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table33-row1-column1")), 0)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table22_row1_column1")), 1)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table33_row1_column1")), 0)
             elif amount_of_rows1 == 3:
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table33-row1-column1")), 1)
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table44-row1-column1")), 0)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table33_row1_column1")), 1)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table44_row1_column1")), 0)
             elif amount_of_rows1 == 4:
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table44-row1-column1")), 1)
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table55-row1-column1")), 0)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table44_row1_column1")), 1)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table55_row1_column1")), 0)
             elif amount_of_rows1 == 5:
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table55-row1-column1")), 1)
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table22-row1-column1")), 0)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table55_row1_column1")), 1)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table22_row1_column1")), 0)
 
 
             if amount_of_rows2 == 2:
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table21-row1-column1")), 1)
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table31-row1-column1")), 0)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table21_row1_column1")), 1)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table31_row1_column1")), 0)
             elif amount_of_rows2 == 3:
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table31-row1-column1")), 1)
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table41-row1-column1")), 0)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table31_row1_column1")), 1)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table41_row1_column1")), 0)
             elif amount_of_rows2 == 4:
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table41-row1-column1")), 1)
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table51-row1-column1")), 0)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table41_row1_column1")), 1)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table51_row1_column1")), 0)
             elif amount_of_rows2 == 5:
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table51-row1-column1")), 1)
-                self.assertEqual(len(self.browser.find_elements(By.NAME, "table21-row1-column1")), 0)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table51_row1_column1")), 1)
+                self.assertEqual(len(self.browser.find_elements(By.NAME, "table21_row1_column1")), 0)
 
 
 
@@ -67,9 +64,7 @@ class TestMatrixTableGenerated(FunctionalTest):
 
             self.DATA_SET = (["-1", "--1"], ["123", "--1"], ["1,9", "+1"], ["123,01", "1,,0"])
 
-            self.__generate_matrix(elem_n)
-
-            self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "generate-the-matrix-block-button-generate").click())
+            self.generate_matrix(elem_n=elem_n, elem_n2=elem_n)
             
             if amount_of_rows1 == 2:
                  self.__test_matrix_can_be_filled_check_variants(table_id="table21", rows=2, columns=1)
@@ -103,24 +98,9 @@ class TestMatrixTableGenerated(FunctionalTest):
                     input_form.send_keys(i[1])
                     self.assertNotEqual(input_form.get_attribute("value"), i[1]) 
 
-
-    def __generate_matrix(self, elem_n):
-            self.browser.find_element(By.TAG_NAME, 'body').send_keys(Keys.PAGE_UP)
-            element = self.browser.find_element(By.ID, "generate-the-matrix-block-table-section-button-1")
-            element.click()
-            
-            self.browser.find_element(By.ID, f"generate-the-matrix-block-table-section-button-1-option-{elem_n}").click()
-            self.assertEqual(element.text, f"{elem_n+1}")
-            element = self.browser.find_element(By.ID, "generate-the-matrix-block-table-section-button-2")
-            element.click()
-
-            self.browser.find_element(By.ID, f"generate-the-matrix-block-table-section-button-2-option-{elem_n}").click()
-            self.assertEqual(element.text, f"{elem_n+1}")
-
-
-
+           
     def __test_matrix_can_be_filled_check_variants(self, table_id, rows, columns):
                   for row in range(1, rows+1):          
                         for column in range(1, columns+1):   
-                            elem_id = f"{table_id}-row{row}-column{column}"
+                            elem_id = f"{table_id}_row{row}_column{column}"
                             self.wait_for(lambda: self.__iter_and_test_through_data_set(elem_id=elem_id))

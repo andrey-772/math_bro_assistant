@@ -1,6 +1,8 @@
 from selenium import webdriver
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 import os
 import time
 
@@ -37,4 +39,18 @@ class FunctionalTest(StaticLiveServerTestCase):
         return fn()
 
     
+    @wait
+    def generate_matrix(self, elem_n=1, elem_n2=1):
+            self.browser.find_element(By.TAG_NAME, 'body').send_keys(Keys.PAGE_UP)
+            element = self.browser.find_element(By.ID, "generate-the-matrix-block-table-section-button-1")
+            element.click()
+            
+            self.browser.find_element(By.ID, f"generate-the-matrix-block-table-section-button-1-option-{elem_n}").click()
+            self.assertEqual(element.text, f"{elem_n+1}")
+            element = self.browser.find_element(By.ID, "generate-the-matrix-block-table-section-button-2")
+            element.click()
 
+            self.browser.find_element(By.ID, f"generate-the-matrix-block-table-section-button-2-option-{elem_n2}").click()
+            self.assertEqual(element.text, f"{elem_n2+1}")
+
+            self.browser.find_element(By.CLASS_NAME, "generate-the-matrix-block-button-generate").click()
