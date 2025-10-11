@@ -11,6 +11,6 @@
     "\\django_app\\matrix\\templates\\includes\\templates_matrix_tables",
     "\\django_app\\matrix\\tests"
   ],
-  "SelectedNode": "\\django_app\\matrix\\templates\\base-matrix-table.html",
+  "SelectedNode": "\\django_app\\matrix\\templates\\includes\\templates_matrix_tables\\row-column-4-3.html",
   "PreviewInSolutionExplorer": false
 }

@@ -1,6 +1,6 @@
 from .base import FunctionalTest
 from selenium.webdriver.common.by import By
-import time
+
 
 class TestSimpleIterationSolution(FunctionalTest):
     def test_generates_if_data_is_valid(self):
@@ -21,6 +21,10 @@ class TestSimpleIterationSolution(FunctionalTest):
                 for table_index in data_set:
                      self.assertEqual(self.browser.find_element(By.NAME, table_index).get_attribute("value"), "0")
 
+        self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click()
+        self.wait_for(self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-anchor").text, "Solution"))
+
+   
 
     def __get_dataset(self, table_index: str) -> list:
         dataset_keys_list = []
