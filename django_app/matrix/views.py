@@ -102,7 +102,6 @@ def simple_iteration_method(request):
         request.session["matrix_fields"][field_name] = field_value
     c = 0
     for k, v in form_data_modified.items():
-        print(f"k- {k}, v- {v}, index- {k[5:7]}")
         if k[5:7] not in table_indexes:
             c += 1
             table_indexes.append(k[5:7])
@@ -121,4 +120,4 @@ def simple_iteration_method(request):
     
 
 def solve_by_simple_iteration_method(request):
-    return render(request, "base.html")
+    return render(request, "simple_iteration_method.html")

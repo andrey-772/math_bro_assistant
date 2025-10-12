@@ -2,8 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\django_app",
+    "\\django_app\\functional_tests",
     "\\django_app\\matrix",
-    "\\django_app\\matrix\\migrations",
     "\\django_app\\matrix\\static",
     "\\django_app\\matrix\\static\\js",
     "\\django_app\\matrix\\templates",
@@ -11,6 +11,6 @@
     "\\django_app\\matrix\\templates\\includes\\templates_matrix_tables",
     "\\django_app\\matrix\\tests"
   ],
-  "SelectedNode": "\\django_app\\matrix\\templates\\includes\\templates_matrix_tables\\row-column-4-3.html",
+  "SelectedNode": "\\django_app\\matrix\\urls.py",
   "PreviewInSolutionExplorer": false
 }

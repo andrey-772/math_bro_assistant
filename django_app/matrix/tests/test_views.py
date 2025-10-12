@@ -1,3 +1,4 @@
+from http import client
 from django.test import TestCase
 import json
 
@@ -17,22 +18,25 @@ class MatrixTableTest(TestCase):
          
 
 class SimpleIterationMethodTest(TestCase):
-    def dtest_uses_render_when_form_data_is_valid_default(self):
+    def test_uses_render_when_form_data_is_valid_default(self):
         for item_n in (2, 3, 4, 5):
             dataset = self.__get_dataset(table_index=f"{item_n}{item_n}", blank=True)
+            dataset2 = self.__get_dataset(table_index=f"{item_n}1", blank=True)
+            dataset.update(dataset2)
             response = self.client.post("/simple_iteration_method/", data=dataset)
-            self.assertTemplateNotUsed(response, "base-matrix-table.html")
+            self.assertRedirects(response, "/solve_by_simple_iteration_method/")
             if item_n < 5:
                 dataset = self.__get_dataset(table_index=f"{item_n+1}{item_n}", blank=True)
+                dataset2 = self.__get_dataset(table_index=f"{item_n+1}1", blank=True)
+                dataset.update(dataset2)
                 response = self.client.post("/simple_iteration_method/", data=dataset)
-                self.assertNotTemplateUsed(response, "base-matrix-table.html")
+                self.assertRedirects(response, "/solve_by_simple_iteration_method/")
                 
 
     def test_uses_redirect_when_form_data_is_valid(self):
         for item_n in (2, 3, 4, 5):
             dataset = self.__get_dataset(table_index=f"{item_n}{item_n}", blank=False)
             dataset2 = self.__get_dataset(table_index=f"{item_n}1", blank=False)
-            print("dataset", type(dataset), dataset)
             dataset.update(dataset2)
             response = self.client.post("/simple_iteration_method/", data=dataset)
             self.assertRedirects(response, "/solve_by_simple_iteration_method/")
@@ -47,6 +51,7 @@ class SimpleIterationMethodTest(TestCase):
 
 
 
+
     def __get_dataset(self, table_index: str, blank: bool=False) -> dict:
         dataset_keys_list = []
         for row_index in range(1, int(table_index[0])+1):
@@ -56,7 +61,7 @@ class SimpleIterationMethodTest(TestCase):
                    
         data = {}   
         if blank:
-            value = ""
+            value = 0
         else:
             value = 123.1
         for k in dataset_keys_list:
@@ -64,7 +69,10 @@ class SimpleIterationMethodTest(TestCase):
         return data
 
 
-
+class SolveBySimpleIterationMethodTest(TestCase):
+    def test_renders_right_template(self):
+        response = self.client.get("/solve_by_simple_iteration_method/")
+        self.assertTemplateUsed(response, "simple_iteration_method.html") 
 
      
 
