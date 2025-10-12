@@ -10,13 +10,13 @@ class TestSimpleIterationSolution(FunctionalTest):
         for item_n in (2, 3, 4, 5):
             self.wait_for(lambda: self.generate_matrix(elem_n=item_n-1, elem_n2=item_n-1))
             self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click()) 
-            self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block").text, "Solution")
+            self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-main-text").text, "Solution")
 
            
             if item_n < 5:
                 self.wait_for(lambda: self.generate_matrix(elem_n=item_n, elem_n2=item_n-1)) 
                 self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click()) 
-                self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block").text, "Solution")
+                self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-main-text").text, "Solution")
 
 
     def test_not_generates_if_data_is_invalid(self):
@@ -36,7 +36,6 @@ class TestSimpleIterationSolution(FunctionalTest):
                  self.wait_for(lambda: self.assertEqual(field.get_attribute("value"), ""))
 
                 
-
             if item_n < 5:
                 self.generate_matrix(elem_n=item_n, elem_n2=item_n-1)
                 data_set = self.__get_dataset_keys(table_index=f"{item_n+1}{item_n}")
@@ -66,7 +65,7 @@ class TestSimpleIterationSolution(FunctionalTest):
                  field = self.browser.find_element(By.NAME, table_index)
                  field.send_keys("1")
             self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click()) 
-            self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block").text, "Solution")
+            self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-main-text").text, "Solution")
             self.assertEqual(self.browser.find_element(By.ID, "generate-the-matrix-block-table-section-button-1").text, row1)
             self.assertEqual(self.browser.find_element(By.ID, "generate-the-matrix-block-table-section-button-2").text, column1)
             self.assertEqual(self.browser.find_element(By.ID, "generate-the-matrix-block-table-section-button-3").text, row2)
@@ -100,9 +99,6 @@ class TestSimpleIterationSolution(FunctionalTest):
                     self.assertEqual(fields[field], "01")
 
 
-            
-
-
             if item_n < 5:
                 self.generate_matrix(elem_n=item_n, elem_n2=item_n-1)
                 row1 = self.browser.find_element(By.ID, "generate-the-matrix-block-table-section-button-1").text
@@ -116,7 +112,7 @@ class TestSimpleIterationSolution(FunctionalTest):
                      field = self.browser.find_element(By.NAME, table_index)
                      field.send_keys("1")
                 self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click()) 
-                self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block").text, "Solution")
+                self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-main-text").text, "Solution")
                 self.assertEqual(self.browser.find_element(By.ID, "generate-the-matrix-block-table-section-button-1").text, row1)
                 self.assertEqual(self.browser.find_element(By.ID, "generate-the-matrix-block-table-section-button-2").text, column1)
                 self.assertEqual(self.browser.find_element(By.ID, "generate-the-matrix-block-table-section-button-3").text, row2)

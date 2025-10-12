@@ -74,12 +74,23 @@
 
         <div class="container matrix-table-block-submit-button-container" id="matrix-table-block-submit-button-anchor">
             <input class="btn btn-primary matrix-table-block-submit-button" type="submit" value="Calculate by simple iteration method " />
-            <a href="#matrix-calculation-simple-iteration-method-block" id="matrix-calculation-simple-iteration-method-anchor"></a>
+            <a href="#matrix-calculation-simple-iteration-method-main-text" id="matrix-calculation-simple-iteration-method-anchor"></a>
         </div>
     </div>
 </form>
 {% endblock %}
 {% block simple_iteration_method %}
 <script src="/static/js/script2.js"></script>
-<h1 id="matrix-calculation-simple-iteration-method-block">Solution</h1>
+<div class="container text-center">
+    <h1 id="matrix-calculation-simple-iteration-method-main-text">Solution</h1>
+    <div class="text-start matrix-calculation-simple-iteration-method-block-block-step1 ">
+        <div id="matrix-calculation-simple-iteration-method-block-block-step1-1">
+            <h3>1. System convergence check</h3>
+            <img src="/static/images/formulas/simple-iter-method-formula-1.png" alt="formula 1" />
+        </div>
+        <h3 id="matrix-calculation-simple-iteration-method-block-block-step1-2" class="matrix-calculation-simple-iteration-method-block-block-step1-A">||A||= x < 1 </h3>
+        <h3 id="matrix-calculation-simple-iteration-method-block-block-step1-3">||B||= y </h3>
+        <h4 id="matrix-calculation-simple-iteration-method-block-block-step1-4">System is convergent</h4>
+    </div>
+</div>
 {% endblock %}
