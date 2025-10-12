@@ -120,4 +120,8 @@ def simple_iteration_method(request):
     
 
 def solve_by_simple_iteration_method(request):
-    return render(request, "simple_iteration_method.html")
+    form1_obj = get_the_form(request.session.get("form1_index"))
+    form2_obj = get_the_form(request.session.get("form2_index"))
+    form1 = form1_obj()
+    form2 = form2_obj()
+    return render(request, "simple_iteration_method.html", context={"context": request.session.get("context"), "matrix_fields": request.session.get("matrix_fields"), "form1": form1, "form2": form2})

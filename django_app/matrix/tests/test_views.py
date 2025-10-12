@@ -1,5 +1,6 @@
-from http import client
 from django.test import TestCase
+from matrix import forms
+from django.contrib.sessions.backends.db import SessionStore
 import json
 
 
@@ -47,10 +48,6 @@ class SimpleIterationMethodTest(TestCase):
                 response = self.client.post("/simple_iteration_method/", data=dataset)
                 self.assertRedirects(response, "/solve_by_simple_iteration_method/")
 
-        
-
-
-
 
     def __get_dataset(self, table_index: str, blank: bool=False) -> dict:
         dataset_keys_list = []
@@ -71,8 +68,74 @@ class SimpleIterationMethodTest(TestCase):
 
 class SolveBySimpleIterationMethodTest(TestCase):
     def test_renders_right_template(self):
+        ss = self.client.session
+        ss["form1_index"] = "22" 
+        ss["form2_index"] = "21"
+        ss.save()
         response = self.client.get("/solve_by_simple_iteration_method/")
         self.assertTemplateUsed(response, "simple_iteration_method.html") 
+
+
+    def test_render_with_right_context(self):
+        ss = self.client.session
+        ss["form1_index"] = "22" 
+        ss["form2_index"] = "21"
+        ss.save()
+        response = self.client.get("/solve_by_simple_iteration_method/")
+        for i in ("context", "matrix_fields", "form1", "form2"):
+            self.assertIn(i, response.context)
+        for i in response.context["context"].values():
+            self.assertIn(int(i), (1, 2, 3, 4))
+        for i in response.context["context"].keys():
+            self.assertIn(i, ("row1", "row2", "column1", "column2"))
+        for i in response.context["matrix_fields"].values():
+            self.assertNotEqual(i, "")
+        self.assertIsInstance(response.context["form1"], self.__get_the_form(table_index=f"{response.context['context']['row1']}{response.context['context']['column1']}"))
+        self.assertIsInstance(response.context["form2"], self.__get_the_form(table_index=f"{response.context['context']['row2']}{response.context['context']['column2']}"))
+        
+
+    def __get_the_form(self, table_index: str):
+        if table_index == "21":
+            return forms.Table21
+        if table_index == "22":
+            return forms.Table22
+        if table_index == "23":
+            return forms.Table23
+        if table_index == "24":
+            return forms.Table24
+        if table_index == "25":
+            return forms.Table25
+        if table_index == "31":
+            return forms.Table31
+        if table_index == "32":
+            return forms.Table32
+        if table_index == "33":
+            return forms.Table33
+        if table_index == "34":
+            return forms.Table34
+        if table_index == "35":
+            return forms.Table35
+        if table_index == "41":
+            return forms.Table41
+        if table_index == "42":
+            return forms.Table42
+        if table_index == "43":
+            return forms.Table43
+        if table_index == "44":
+            return forms.Table44
+        if table_index == "45":
+            return forms.Table45
+        if table_index == "51":
+            return forms.Table51
+        if table_index == "52":
+            return forms.Table52
+        if table_index == "53":
+            return forms.Table53
+        if table_index == "54":
+            return forms.Table54
+        if table_index == "55":
+            return forms.Table55
+
 
      
 
