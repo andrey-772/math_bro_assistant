@@ -68,19 +68,13 @@ class SimpleIterationMethodTest(TestCase):
 
 class SolveBySimpleIterationMethodTest(TestCase):
     def test_renders_right_template(self):
-        ss = self.client.session
-        ss["form1_index"] = "22" 
-        ss["form2_index"] = "21"
-        ss.save()
+        self.__create_and_fill_client_session()
         response = self.client.get("/solve_by_simple_iteration_method/")
         self.assertTemplateUsed(response, "simple_iteration_method.html") 
 
 
     def test_render_with_right_context(self):
-        ss = self.client.session
-        ss["form1_index"] = "22" 
-        ss["form2_index"] = "21"
-        ss.save()
+        self.__create_and_fill_client_session()
         response = self.client.get("/solve_by_simple_iteration_method/")
         for i in ("context", "matrix_fields", "form1", "form2"):
             self.assertIn(i, response.context)
@@ -93,6 +87,18 @@ class SolveBySimpleIterationMethodTest(TestCase):
         self.assertIsInstance(response.context["form1"], self.__get_the_form(table_index=f"{response.context['context']['row1']}{response.context['context']['column1']}"))
         self.assertIsInstance(response.context["form2"], self.__get_the_form(table_index=f"{response.context['context']['row2']}{response.context['context']['column2']}"))
         
+
+    def __create_and_fill_client_session(self):
+        data_set = self.__get_dataset(table_index="22")
+        data_set2 = self.__get_dataset(table_index="21")
+        data_set.update(data_set2)
+        ss = self.client.session
+        ss["form1_index"] = "33" 
+        ss["form2_index"] = "31"
+        ss["context"] = {"row1": "3", "column1": "3", "row2": "3", "column2": "1"}
+        ss["matrix_fields"] = data_set
+        ss.save()
+
 
     def __get_the_form(self, table_index: str):
         if table_index == "21":
@@ -137,7 +143,21 @@ class SolveBySimpleIterationMethodTest(TestCase):
             return forms.Table55
 
 
-     
+    def __get_dataset(self, table_index: str, blank: bool=False) -> dict:
+        dataset_keys_list = []
+        for row_index in range(1, int(table_index[0])+1):
+              for column_index in range(1, int(table_index[1])+1):
+                   dataset_keys_list.append("table"+table_index+"_row"+str(row_index)+"_column"+str(column_index))
+
+                   
+        data = {}   
+        if blank:
+            value = 0
+        else:
+            value = 123.1
+        for k in dataset_keys_list:
+            data[k] = value
+        return data
 
          
      
