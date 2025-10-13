@@ -20,6 +20,7 @@ class MatrixTableTest(TestCase):
 
 class SimpleIterationMethodTest(TestCase):
     def test_uses_render_when_form_data_is_valid_default(self):
+        self.__create_and_fill_client_session()
         for item_n in (2, 3, 4, 5):
             dataset = self.__get_dataset(table_index=f"{item_n}{item_n}", blank=True)
             dataset2 = self.__get_dataset(table_index=f"{item_n}1", blank=True)
@@ -35,6 +36,7 @@ class SimpleIterationMethodTest(TestCase):
                 
 
     def test_uses_redirect_when_form_data_is_valid(self):
+        self.__create_and_fill_client_session()
         for item_n in (2, 3, 4, 5):
             dataset = self.__get_dataset(table_index=f"{item_n}{item_n}", blank=False)
             dataset2 = self.__get_dataset(table_index=f"{item_n}1", blank=False)
@@ -47,6 +49,22 @@ class SimpleIterationMethodTest(TestCase):
                 dataset.update(dataset2)
                 response = self.client.post("/simple_iteration_method/", data=dataset)
                 self.assertRedirects(response, "/solve_by_simple_iteration_method/")
+
+
+    def __create_and_fill_client_session(self):
+        data_set = self.__get_dataset(table_index="33")
+        data_set2 = self.__get_dataset(table_index="31")
+        data_set.update(data_set2)
+        ss = self.client.session
+        ss["form1_index"] = "33" 
+        ss["form2_index"] = "31"
+        ss["context"] = {"row1": "3", "column1": "3", "row2": "3", "column2": "1"}
+        ss["matrix_fields"] = data_set
+        ss["first_step"] = {}
+        ss["first_step"]["a"] = 0
+        ss["first_step"]["b"] = 0
+        ss["first_step"]["operator"] = "<"
+        ss.save()
 
 
     def __get_dataset(self, table_index: str, blank: bool=False) -> dict:
@@ -65,6 +83,9 @@ class SimpleIterationMethodTest(TestCase):
             data[k] = value
         return data
 
+         
+     
+
 
 class SolveBySimpleIterationMethodTest(TestCase):
     def test_renders_right_template(self):
@@ -75,6 +96,7 @@ class SolveBySimpleIterationMethodTest(TestCase):
 
     def test_render_with_right_context(self):
         self.__create_and_fill_client_session()
+        print("123")
         response = self.client.get("/solve_by_simple_iteration_method/")
         for i in ("context", "matrix_fields", "form1", "form2"):
             self.assertIn(i, response.context)
@@ -86,17 +108,23 @@ class SolveBySimpleIterationMethodTest(TestCase):
             self.assertNotEqual(i, "")
         self.assertIsInstance(response.context["form1"], self.__get_the_form(table_index=f"{response.context['context']['row1']}{response.context['context']['column1']}"))
         self.assertIsInstance(response.context["form2"], self.__get_the_form(table_index=f"{response.context['context']['row2']}{response.context['context']['column2']}"))
+        self.assertIsInstance(response.context["first_step"]["a"], float)
+        self.assertIn(response.context["first_step"]["operator"], ["<", ">", "="])
         
 
     def __create_and_fill_client_session(self):
-        data_set = self.__get_dataset(table_index="22")
-        data_set2 = self.__get_dataset(table_index="21")
+        data_set = self.__get_dataset(table_index="33")
+        data_set2 = self.__get_dataset(table_index="31")
         data_set.update(data_set2)
         ss = self.client.session
         ss["form1_index"] = "33" 
         ss["form2_index"] = "31"
         ss["context"] = {"row1": "3", "column1": "3", "row2": "3", "column2": "1"}
         ss["matrix_fields"] = data_set
+        ss["first_step"] = {}
+        ss["first_step"]["a"] = 0
+        ss["first_step"]["b"] = 0
+        ss["first_step"]["operator"] = "<"
         ss.save()
 
 

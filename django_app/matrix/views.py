@@ -120,8 +120,72 @@ def simple_iteration_method(request):
     
 
 def solve_by_simple_iteration_method(request):
+    request.session["first_step"] = {}
     form1_obj = get_the_form(request.session.get("form1_index"))
     form2_obj = get_the_form(request.session.get("form2_index"))
     form1 = form1_obj()
     form2 = form2_obj()
-    return render(request, "simple_iteration_method.html", context={"context": request.session.get("context"), "matrix_fields": request.session.get("matrix_fields"), "form1": form1, "form2": form2})
+    data = calculate_convergence(tables_data=request.session.get("matrix_fields"))
+    request.session["first_step"]["a"], request.session["first_step"]["b"] = data[0], data[1]
+    if request.session["first_step"]["a"] < 1:
+        request.session["first_step"]["operator"] = "<"
+    elif request.session["first_step"]["a"] > 1:
+        request.session["first_step"]["operator"] = ">"
+    else:
+        request.session["first_step"]["operator"] = "="
+    return render(request, "simple_iteration_method.html", context={"context": request.session.get("context"), "matrix_fields": request.session.get("matrix_fields"), "form1": form1, "form2": form2, "first_step": request.session["first_step"]})
+
+
+def calculate_convergence(tables_data: dict) -> list:
+        """
+        The first element of the list is the value of matrix table A,
+        the second element of the list is the value of matrix table B
+        """
+        table_indexes = []
+        form_data = {}
+        rows_table_1 = []
+        rows_table_2 = []
+        c = 0
+        for k, v in tables_data.items():
+            if k[5:7] not in table_indexes:
+                c += 1
+                table_indexes.append(k[5:7])
+            if c == 1:
+                if k[8:11] not in rows_table_1:
+                    rows_table_1.append(k[8:11])
+                if form_data.get(str(table_indexes[0])) is None:
+                    form_data[str(table_indexes[0])] = {}
+                if form_data[str(table_indexes[0])].get(k[8:11]) is None:
+                    form_data[str(table_indexes[0])][k[8:11]] = []
+                form_data[str(table_indexes[0])][k[8:11]].append(v)
+            elif c == 2:
+                if k[8:11] not in rows_table_2:
+                    rows_table_2.append(k[8:11])
+                if form_data.get(str(table_indexes[1])) is None:
+                    form_data[str(table_indexes[1])] = {}
+                if form_data[str(table_indexes[1])].get(k[8:11]) is None:
+                    form_data[str(table_indexes[1])][k[8:11]] = []
+                form_data[str(table_indexes[1])][k[8:11]].append(v)
+
+
+        row_values = []
+        for row in rows_table_1:
+            row_abs = []
+            for i in form_data[table_indexes[0]][row]:
+                row_abs.append(abs(float(i)))
+            row_values.append(max(row_abs))
+            
+        row_values2 = []
+        for row in rows_table_2:
+            row_abs = []
+            for i in form_data[table_indexes[1]][row]:
+                row_abs.append(abs(float(i)))
+            row_values2.append(max(row_abs))
+
+        return [max(row_values), max(row_values2)]
+
+
+
+
+
+       
