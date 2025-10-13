@@ -61,10 +61,6 @@ class SimpleIterationMethodTest(TestCase):
         ss["context"] = {"row1": "3", "column1": "3", "row2": "3", "column2": "1"}
         ss["matrix_fields_modified"] = data_set
         ss["matrix_fields"] = data_set
-        ss["first_step"] = {}
-        ss["first_step"]["a"] = 0
-        ss["first_step"]["b"] = 0
-        ss["first_step"]["operator"] = "<"
         ss.save()
 
 
@@ -111,6 +107,7 @@ class SolveBySimpleIterationMethodTest(TestCase):
         self.assertIsInstance(response.context["form2"], self.__get_the_form(table_index=f"{response.context['context']['row2']}{response.context['context']['column2']}"))
         self.assertIsInstance(response.context["first_step"]["a"], float)
         self.assertIn(response.context["first_step"]["operator"], ["<", ">", "="])
+        self.assertIn(response.context["first_step"]["message"], ["System is not convergent", "System is not convergent"])
         
 
     def __create_and_fill_client_session(self):
@@ -123,10 +120,6 @@ class SolveBySimpleIterationMethodTest(TestCase):
         ss["context"] = {"row1": "3", "column1": "3", "row2": "3", "column2": "1"}
         ss["matrix_fields"] = data_set
         ss["matrix_fields_modified"] = data_set
-        ss["first_step"] = {}
-        ss["first_step"]["a"] = 0
-        ss["first_step"]["b"] = 0
-        ss["first_step"]["operator"] = "<"
         ss.save()
 
 

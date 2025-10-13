@@ -10,13 +10,13 @@ class TestSimpleIterationSolution(FunctionalTest):
         for item_n in (2, 3, 4, 5):
             self.wait_for(lambda: self.generate_matrix(elem_n=item_n-1, elem_n2=item_n-1))
             self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click()) 
-            self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-main-text").text, "Solution")
+            self.wait_for(lambda: self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-main-text").text, "Solution"))
 
            
             if item_n < 5:
                 self.wait_for(lambda: self.generate_matrix(elem_n=item_n, elem_n2=item_n-1)) 
                 self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click()) 
-                self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-main-text").text, "Solution")
+                self.wait_for(lambda: self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-main-text").text, "Solution"))
 
 
     def test_not_generates_if_data_is_invalid(self):
@@ -99,6 +99,8 @@ class TestSimpleIterationSolution(FunctionalTest):
                 for field in fields.keys():
                     self.assertEqual(fields[field], "01")
 
+
+            
 
 
             if item_n < 5:

@@ -83,17 +83,26 @@
 <script src="/static/js/script2.js"></script>
 <div class="container text-center">
     <h1 id="matrix-calculation-simple-iteration-method-main-text">Solution</h1>
-    <div class="text-start matrix-calculation-simple-iteration-method-block-block-step1 ">
+    <div class="text-start matrix-calculation-simple-iteration-method-block">
         <div id="matrix-calculation-simple-iteration-method-block-block-step1-1">
             <h3>1. System convergence check</h3>
             <img src="/static/images/formulas/simple-iter-method-formula-1.png" alt="formula 1" />
         </div>
         <a href="#matrix-calculation-simple-iteration-method-block-block-step1-2" id="matrix-calculation-simple-iteration-method-block-block-step1-2-anchor"></a>
-        <h3 id="matrix-calculation-simple-iteration-method-block-block-step1-2" class="matrix-calculation-simple-iteration-method-block-block-step1-A">||A||={{first_step.a}} {{first_step.operator}} 1 </h3>
+        <h3 id="matrix-calculation-simple-iteration-method-block-block-step1-2" class="matrix-calculation-simple-iteration-method-block-block-step1-2">||A|| = {{first_step.a}} {{first_step.operator}} 1 </h3>
         <a href="#matrix-calculation-simple-iteration-method-block-block-step1-3" id="matrix-calculation-simple-iteration-method-block-block-step1-3-anchor"></a>
-        <h3 id="matrix-calculation-simple-iteration-method-block-block-step1-3">||B||= {{first_step.b}} </h3>
+        <h3 id="matrix-calculation-simple-iteration-method-block-block-step1-3">||B|| = {{first_step.b}} </h3>
         <a href="#matrix-calculation-simple-iteration-method-block-block-step1-4" id="matrix-calculation-simple-iteration-method-block-block-step1-4-anchor"></a>
-        <h4 id="matrix-calculation-simple-iteration-method-block-block-step1-4">System is convergent</h4>
+        <h4 id="matrix-calculation-simple-iteration-method-block-block-step1-4">{{first_step.message}}</h4>
+
+        <div id="matrix-calculation-simple-iteration-method-block-block-step2-1" class="matrix-calculation-simple-iteration-method-block-block-step2-1">
+            <h3>2. Calculate the iteration number</h3>
+            <img src="/static/images/formulas/simple-iter-method-formula-2.png" alt="formula 2" />
+        </div>
+        <a href="#matrix-calculation-simple-iteration-method-block-block-step2-2" id="matrix-calculation-simple-iteration-method-block-block-step2-2-anchor"></a>
+        <h3 id="matrix-calculation-simple-iteration-method-block-block-step2-2" class="matrix-calculation-simple-iteration-method-block-block-step2-2">k+1 >= x</h3>
+        <a href="#matrix-calculation-simple-iteration-method-block-block-step2-3" id="matrix-calculation-simple-iteration-method-block-block-step2-3-anchor"></a>
+        <h3 id="matrix-calculation-simple-iteration-method-block-block-step2-3">k = y</h3>
     </div>
 </div>
 {% endblock %}

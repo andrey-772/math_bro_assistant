@@ -5,7 +5,7 @@ import time
 import random
 
 
-class TestSolution(FunctionalTest):
+class TestSolutionFirstStep(FunctionalTest):
     def test_given_solution_first_step_shows_correct_when_A_is_bigger_than_1(self):
         self.browser.get(self.live_server_url)
 
@@ -28,6 +28,8 @@ class TestSolution(FunctionalTest):
             self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
             self.assertIn(">", self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
             self.assertIn(str(b), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-3").text)
+            self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-4").text, "System is convergent")
+
 
 
             if item_n < 5:
@@ -43,10 +45,11 @@ class TestSolution(FunctionalTest):
                 self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click())
                 data = self.__calculate_convergence(dataset[0])
                 a, b = data[0], data[1]
-                #time.sleep(10)
                 self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
                 self.assertIn(">", self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
                 self.assertIn(str(b), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-3").text)
+                self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-4").text, "System is convergent")
+
 
 
     def test_given_solution_first_step_shows_correct_when_A_is_equals_1(self):
@@ -71,6 +74,7 @@ class TestSolution(FunctionalTest):
             self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
             self.assertIn("=", self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
             self.assertIn(str(b), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-3").text)
+            self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-4").text, "System is not convergent")
 
 
             if item_n < 5:
@@ -93,6 +97,7 @@ class TestSolution(FunctionalTest):
                 self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
                 self.assertIn("=", self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
                 self.assertIn(str(b), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-3").text)
+                self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-4").text, "System is not convergent")
 
 
 
@@ -117,6 +122,7 @@ class TestSolution(FunctionalTest):
             self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
             self.assertIn("<", self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
             self.assertIn(str(b), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-3").text)
+            self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-4").text, "System is not convergent")
 
 
             if item_n < 5:
@@ -137,9 +143,7 @@ class TestSolution(FunctionalTest):
                 self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
                 self.assertIn("<", self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
                 self.assertIn(str(b), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-3").text)
-
-
-       
+                self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-4").text, "System is not convergent")
 
 
     def __calculate_convergence(self, tables_data: dict) -> list:
@@ -217,3 +221,6 @@ class TestSolution(FunctionalTest):
 
         return [data, data_2]
 
+
+class TestSolutionSecondStep(FunctionalTest):
+    pass

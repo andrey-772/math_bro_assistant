@@ -131,10 +131,13 @@ def solve_by_simple_iteration_method(request):
     request.session["first_step"]["a"], request.session["first_step"]["b"] = data[0], data[1]
     if request.session["first_step"]["a"] < 1:
         request.session["first_step"]["operator"] = "<"
+        request.session["first_step"]["message"] = "System is convergent"
     elif request.session["first_step"]["a"] > 1:
         request.session["first_step"]["operator"] = ">"
+        request.session["first_step"]["message"] = "System is not convergent"
     else:
         request.session["first_step"]["operator"] = "="
+        request.session["first_step"]["message"] = "System is not convergent"
     return render(request, "simple_iteration_method.html", context={"context": request.session.get("context"), "matrix_fields": request.session.get("matrix_fields"), "form1": form1, "form2": form2, "first_step": request.session["first_step"]})
 
 
