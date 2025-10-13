@@ -59,6 +59,7 @@ class SimpleIterationMethodTest(TestCase):
         ss["form1_index"] = "33" 
         ss["form2_index"] = "31"
         ss["context"] = {"row1": "3", "column1": "3", "row2": "3", "column2": "1"}
+        ss["matrix_fields_modified"] = data_set
         ss["matrix_fields"] = data_set
         ss["first_step"] = {}
         ss["first_step"]["a"] = 0
@@ -121,6 +122,7 @@ class SolveBySimpleIterationMethodTest(TestCase):
         ss["form2_index"] = "31"
         ss["context"] = {"row1": "3", "column1": "3", "row2": "3", "column2": "1"}
         ss["matrix_fields"] = data_set
+        ss["matrix_fields_modified"] = data_set
         ss["first_step"] = {}
         ss["first_step"]["a"] = 0
         ss["first_step"]["b"] = 0

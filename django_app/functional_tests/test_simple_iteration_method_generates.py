@@ -36,6 +36,7 @@ class TestSimpleIterationSolution(FunctionalTest):
                  self.wait_for(lambda: self.assertEqual(field.get_attribute("value"), ""))
 
                 
+
             if item_n < 5:
                 self.generate_matrix(elem_n=item_n, elem_n2=item_n-1)
                 data_set = self.__get_dataset_keys(table_index=f"{item_n+1}{item_n}")
@@ -97,6 +98,7 @@ class TestSimpleIterationSolution(FunctionalTest):
                 fields = self.__get_dataset(table_index=f"{row1}{column1}")
                 for field in fields.keys():
                     self.assertEqual(fields[field], "01")
+
 
 
             if item_n < 5:

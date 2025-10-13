@@ -81,6 +81,7 @@ def simple_iteration_method(request):
     form_data_for_first_table = {}
     form_data_for_second_table = {}
     request.session["matrix_fields"] = {}
+    request.session["matrix_fields_modified"] = {}
     for field_name, field_value in form_data_not_modified.items():
         m_field_name = ""
         for s in field_name:
@@ -98,8 +99,9 @@ def simple_iteration_method(request):
                         new_field_value += "."
                         continue
                     new_field_value += s
-                form_data_modified[m_field_name] = float(new_field_value)
+                form_data_modified[m_field_name] = float(new_field_value) 
         request.session["matrix_fields"][field_name] = field_value
+    request.session["matrix_fields_modified"] = form_data_modified
     c = 0
     for k, v in form_data_modified.items():
         if k[5:7] not in table_indexes:
@@ -125,7 +127,7 @@ def solve_by_simple_iteration_method(request):
     form2_obj = get_the_form(request.session.get("form2_index"))
     form1 = form1_obj()
     form2 = form2_obj()
-    data = calculate_convergence(tables_data=request.session.get("matrix_fields"))
+    data = calculate_convergence(tables_data=request.session.get("matrix_fields_modified"))
     request.session["first_step"]["a"], request.session["first_step"]["b"] = data[0], data[1]
     if request.session["first_step"]["a"] < 1:
         request.session["first_step"]["operator"] = "<"

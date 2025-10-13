@@ -1,89 +1,148 @@
 from .base import FunctionalTest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+import time
+import random
 
 
 class TestSolution(FunctionalTest):
-    def test_given_solution_first_step_shows_correct_when_it_is_positive(self):
+    def test_given_solution_first_step_shows_correct_when_A_is_bigger_than_1(self):
         self.browser.get(self.live_server_url)
 
         for item_n in (2, 3, 4, 5):
             self.generate_matrix(elem_n=item_n-1, elem_n2=item_n-1)
             dataset = self.__get_dataset(table_index=f"{item_n}{item_n}")
             dataset2 = self.__get_dataset(table_index=f"{item_n}1")
-            dataset.update(dataset2)
-            for table_index in dataset.keys():
+            dataset[0].update(dataset2[0])
+            dataset[1].update(dataset2[1])
+            
+
+            for table_index in dataset[1].keys():
                      field = self.browser.find_element(By.NAME, table_index)
                      field.send_keys(Keys.BACKSPACE)
-                     field.send_keys(dataset[table_index])
-                     self.wait_for(lambda: self.assertEqual(float(field.get_attribute("value")), dataset[table_index]))
+                     field.send_keys(dataset[1][table_index])
+
             self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click())
-            print(dataset)
-            a_index = self.__calculate_A_index(dataset)
-            self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-main-text").text, "Solution")
-            self.assertIn(str(a_index), self.browser.find_element(By.CLASS_NAME, "matrix-calculation-simple-iteration-method-block-block-step1-A").text)
-            self.assertIn(">", self.browser.find_element(By.CLASS_NAME, "matrix-calculation-simple-iteration-method-block-block-step1-A").text)
- 
+            data = self.__calculate_convergence(dataset[0])
+            a, b = data[0], data[1]
+            self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
+            self.assertIn(">", self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
+            self.assertIn(str(b), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-3").text)
+
+
             if item_n < 5:
-                self.generate_matrix(elem_n=item_n-1, elem_n2=item_n)
+                self.generate_matrix(elem_n=item_n, elem_n2=item_n-1)
                 dataset = self.__get_dataset(table_index=f"{item_n+1}{item_n}")
                 dataset2 = self.__get_dataset(table_index=f"{item_n+1}1")
-                dataset.update(dataset2)
-                for table_index in dataset.keys():
+                dataset[0].update(dataset2[0])
+                dataset[1].update(dataset2[1]) 
+                for table_index in dataset[1].keys():
                          field = self.browser.find_element(By.NAME, table_index)
                          field.send_keys(Keys.BACKSPACE)
-                         field.send_keys(dataset[table_index])
-                         self.wait_for(lambda: self.assertEqual(float(field.get_attribute("value")), dataset[table_index]))
+                         field.send_keys(dataset[1][table_index])
                 self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click())
-                print(dataset)
-                a_index = self.__calculate_A_index(dataset)
-                self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-main-text").text, "Solution")
-                self.assertIn(str(a_index), self.browser.find_element(By.CLASS_NAME, "matrix-calculation-simple-iteration-method-block-block-step1-A").text)
-                self.assertIn(">", self.browser.find_element(By.CLASS_NAME, "matrix-calculation-simple-iteration-method-block-block-step1-A").text)
+                data = self.__calculate_convergence(dataset[0])
+                a, b = data[0], data[1]
+                #time.sleep(10)
+                self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
+                self.assertIn(">", self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
+                self.assertIn(str(b), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-3").text)
 
 
-    def test_given_solution_first_step_shows_correct_when_it_is_negative(self):
+    def test_given_solution_first_step_shows_correct_when_A_is_equals_1(self):
         self.browser.get(self.live_server_url)
 
         for item_n in (2, 3, 4, 5):
             self.generate_matrix(elem_n=item_n-1, elem_n2=item_n-1)
-            dataset = self.__get_dataset(table_index=f"{item_n}{item_n}", negative=True)
-            dataset2 = self.__get_dataset(table_index=f"{item_n}1", negative=True)
-            dataset.update(dataset2)
-            for table_index in dataset.keys():
+            dataset = self.__get_dataset(table_index=f"{item_n}{item_n}", is_1=True)
+            dataset2 = self.__get_dataset(table_index=f"{item_n}1", is_1=True)
+            dataset[0].update(dataset2[0])
+            dataset[1].update(dataset2[1])
+
+            for table_index in dataset[1].keys():
                      field = self.browser.find_element(By.NAME, table_index)
                      field.send_keys(Keys.BACKSPACE)
-                     field.send_keys(dataset[table_index])
-                     self.wait_for(lambda: self.assertEqual(float(field.get_attribute("value")), dataset[table_index]))
+                     field.send_keys(dataset[1][table_index])
+
             self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click())
-            print(dataset)
-            a_index = self.__calculate_A_index(dataset)
-            self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-main-text").text, "Solution")
-            self.assertIn(str(a_index), self.browser.find_element(By.CLASS_NAME, "matrix-calculation-simple-iteration-method-block-block-step1-A").text)
-            self.assertIn("<", self.browser.find_element(By.CLASS_NAME, "matrix-calculation-simple-iteration-method-block-block-step1-A").text)
- 
+            print(dataset[0], dataset[1])
+            data = self.__calculate_convergence(dataset[0])
+            a, b = data[0], data[1]
+            self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
+            self.assertIn("=", self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
+            self.assertIn(str(b), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-3").text)
+
+
             if item_n < 5:
-                self.generate_matrix(elem_n=item_n-1, elem_n2=item_n)
-                dataset = self.__get_dataset(table_index=f"{item_n+1}{item_n}", negative=True)
-                dataset2 = self.__get_dataset(table_index=f"{item_n+1}1", negative=True)
-                dataset.update(dataset2)
-                for table_index in dataset.keys():
+                self.generate_matrix(elem_n=item_n, elem_n2=item_n-1)
+                dataset = self.__get_dataset(table_index=f"{item_n+1}{item_n}", is_1=True)
+                dataset2 = self.__get_dataset(table_index=f"{item_n+1}1", is_1=True)
+                dataset[0].update(dataset2[0])
+                dataset[1].update(dataset2[1])
+
+                for table_index in dataset[1].keys():
                          field = self.browser.find_element(By.NAME, table_index)
                          field.send_keys(Keys.BACKSPACE)
-                         field.send_keys(dataset[table_index])
-                         self.wait_for(lambda: self.assertEqual(float(field.get_attribute("value")), dataset[table_index]))
+                         field.send_keys(dataset[1][table_index])
+    
                 self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click())
-                print(dataset)
-                a_index = self.__calculate_A_index(dataset)
-                self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-main-text").text, "Solution")
-                self.assertIn(str(a_index), self.browser.find_element(By.CLASS_NAME, "matrix-calculation-simple-iteration-method-block-block-step1-A").text)
-                self.assertIn("<", self.browser.find_element(By.CLASS_NAME, "matrix-calculation-simple-iteration-method-block-block-step1-A").text)
+                print(dataset[0], dataset[1])
+                data = self.__calculate_convergence(dataset[0])
+                a, b = data[0], data[1]
+                time.sleep(5)
+                self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
+                self.assertIn("=", self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
+                self.assertIn(str(b), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-3").text)
+
+
+
+    def test_given_solution_first_step_shows_correct_when_A_is_lower_than_1(self):
+        self.browser.get(self.live_server_url)
+
+        for item_n in (2, 3, 4, 5):
+            self.generate_matrix(elem_n=item_n-1, elem_n2=item_n-1)
+            dataset = self.__get_dataset(table_index=f"{item_n}{item_n}", small=True)
+            dataset2 = self.__get_dataset(table_index=f"{item_n}1", small=True)
+            dataset[0].update(dataset2[0])
+            dataset[1].update(dataset2[1])
+            for table_index in dataset[1].keys():
+                     field = self.browser.find_element(By.NAME, table_index)
+                     field.send_keys(Keys.BACKSPACE)
+                     field.send_keys(dataset[1][table_index])
+
+            self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click())
+            print(dataset[0], dataset[1])
+            data = self.__calculate_convergence(dataset[0])
+            a, b = data[0], data[1]
+            self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
+            self.assertIn("<", self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
+            self.assertIn(str(b), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-3").text)
+
+
+            if item_n < 5:
+                self.generate_matrix(elem_n=item_n, elem_n2=item_n-1)
+                dataset = self.__get_dataset(table_index=f"{item_n+1}{item_n}", small=True)
+                dataset2 = self.__get_dataset(table_index=f"{item_n+1}1", small=True)
+                dataset[0].update(dataset2[0])
+                dataset[1].update(dataset2[1])
+                for table_index in dataset[1].keys():
+                         field = self.browser.find_element(By.NAME, table_index)
+                         field.send_keys(Keys.BACKSPACE)
+                         field.send_keys(dataset[1][table_index])
+    
+                self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click())
+                print(dataset[0], dataset[1])
+                data = self.__calculate_convergence(dataset[0])
+                a, b = data[0], data[1]
+                self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
+                self.assertIn("<", self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
+                self.assertIn(str(b), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-3").text)
 
 
        
 
 
-    def __calculate_A_index(self, tables_data):
+    def __calculate_convergence(self, tables_data: dict) -> list:
         table_indexes = []
         form_data = {}
         rows_table_1 = []
@@ -117,22 +176,44 @@ class TestSolution(FunctionalTest):
             for i in form_data[table_indexes[0]][row]:
                 row_abs.append(abs(i))
             row_values.append(max(row_abs))
-        return max(row_values)
-       
 
-    def __get_dataset(self, table_index: str, negative: bool=False) -> list:
+
+        row_values2 = []
+        for row in rows_table_2:
+            row_abs = []
+            for i in form_data[table_indexes[1]][row]:
+                row_abs.append(abs(i))
+            row_values2.append(max(row_abs))
+
+        return [max(row_values), max(row_values2)]
+
+
+    def __get_dataset(self, table_index: str, small: bool=False, is_1: bool=False) -> list:
         dataset_keys_list = []
         for row_index in range(1, int(table_index[0])+1):
               for column_index in range(1, int(table_index[1])+1):
                    dataset_keys_list.append("table"+table_index+"_row"+str(row_index)+"_column"+str(column_index))
         
+
         data = {}   
-        value = 1
-        if negative:
-            value = -1 
+        data_2 = {}
         for k in dataset_keys_list:
+            value = random.randint(-1000000, 1000000)
+            value2 = value
+            if small:
+                value =  round(random.uniform(0.1, 0.9), 3)
+                proper_value = ""
+                for i in str(value):
+                    if i == ".":
+                        proper_value += ","
+                    else:
+                        proper_value += i
+                value2 = proper_value
+            if is_1:
+                value = 1
+                value2 = 1
             data[k] = value
-            value += 1
-            if negative:
-                value -= 2
-        return data
+            data_2[k] = value2
+
+        return [data, data_2]
+
