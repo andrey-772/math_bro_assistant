@@ -26,45 +26,48 @@ class SimpleIterationMethodTest(TestCase):
             dataset2 = self.__get_dataset(table_index=f"{item_n}1", blank=True)
             dataset.update(dataset2)
             response = self.client.post("/simple_iteration_method/", data=dataset)
+            self.__create_and_fill_client_session()    
             self.assertRedirects(response, "/solve_by_simple_iteration_method/")
             if item_n < 5:
                 dataset = self.__get_dataset(table_index=f"{item_n+1}{item_n}", blank=True)
                 dataset2 = self.__get_dataset(table_index=f"{item_n+1}1", blank=True)
                 dataset.update(dataset2)
                 response = self.client.post("/simple_iteration_method/", data=dataset)
+                self.__create_and_fill_client_session()
                 self.assertRedirects(response, "/solve_by_simple_iteration_method/")
                 
 
     def test_uses_redirect_when_form_data_is_valid(self):
-        self.__create_and_fill_client_session()
         for item_n in (2, 3, 4, 5):
             dataset = self.__get_dataset(table_index=f"{item_n}{item_n}", blank=False)
             dataset2 = self.__get_dataset(table_index=f"{item_n}1", blank=False)
             dataset.update(dataset2)
             response = self.client.post("/simple_iteration_method/", data=dataset)
+            self.__create_and_fill_client_session()
             self.assertRedirects(response, "/solve_by_simple_iteration_method/")
             if item_n < 5:
                 dataset = self.__get_dataset(table_index=f"{item_n+1}{item_n}", blank=False)
                 dataset2 = self.__get_dataset(table_index=f"{item_n+1}1", blank=False)
                 dataset.update(dataset2)
                 response = self.client.post("/simple_iteration_method/", data=dataset)
+                self.__create_and_fill_client_session()
                 self.assertRedirects(response, "/solve_by_simple_iteration_method/")
 
 
     def __create_and_fill_client_session(self):
-        data_set = self.__get_dataset(table_index="33")
+        data_set = self.__get_dataset(table_index="33", for_method=True)
         data_set2 = self.__get_dataset(table_index="31")
         data_set.update(data_set2)
         ss = self.client.session
         ss["form1_index"] = "33" 
         ss["form2_index"] = "31"
         ss["context"] = {"row1": "3", "column1": "3", "row2": "3", "column2": "1"}
-        ss["matrix_fields_modified"] = data_set
         ss["matrix_fields"] = data_set
+        ss["matrix_fields_modified"] = data_set
         ss.save()
 
-
-    def __get_dataset(self, table_index: str, blank: bool=False) -> dict:
+    
+    def __get_dataset(self, table_index: str, blank: bool=False, for_method: bool=False) -> dict:
         dataset_keys_list = []
         for row_index in range(1, int(table_index[0])+1):
               for column_index in range(1, int(table_index[1])+1):
@@ -74,11 +77,15 @@ class SimpleIterationMethodTest(TestCase):
         data = {}   
         if blank:
             value = 0
+        elif for_method:
+            value = 0.5
         else:
             value = 123.1
         for k in dataset_keys_list:
             data[k] = value
         return data
+
+
 
          
      
@@ -107,11 +114,13 @@ class SolveBySimpleIterationMethodTest(TestCase):
         self.assertIsInstance(response.context["form2"], self.__get_the_form(table_index=f"{response.context['context']['row2']}{response.context['context']['column2']}"))
         self.assertIsInstance(response.context["first_step"]["a"], float)
         self.assertIn(response.context["first_step"]["operator"], ["<", ">", "="])
-        self.assertIn(response.context["first_step"]["message"], ["System is not convergent", "System is not convergent"])
+        self.assertIn(response.context["first_step"]["message"], ["System is convergent", "System is not convergent"])
+        self.assertIsInstance(response.context["second_step"]["k1"], float)
+        self.assertIsInstance(response.context["second_step"]["k2"], int)
         
 
     def __create_and_fill_client_session(self):
-        data_set = self.__get_dataset(table_index="33")
+        data_set = self.__get_dataset(table_index="33", for_method=True)
         data_set2 = self.__get_dataset(table_index="31")
         data_set.update(data_set2)
         ss = self.client.session
@@ -121,6 +130,26 @@ class SolveBySimpleIterationMethodTest(TestCase):
         ss["matrix_fields"] = data_set
         ss["matrix_fields_modified"] = data_set
         ss.save()
+
+    
+    def __get_dataset(self, table_index: str, blank: bool=False, for_method: bool=False) -> dict:
+        dataset_keys_list = []
+        for row_index in range(1, int(table_index[0])+1):
+              for column_index in range(1, int(table_index[1])+1):
+                   dataset_keys_list.append("table"+table_index+"_row"+str(row_index)+"_column"+str(column_index))
+
+                   
+        data = {}   
+        if blank:
+            value = 0
+        elif for_method:
+            value = 0.5
+        else:
+            value = 123.1
+        for k in dataset_keys_list:
+            data[k] = value
+        return data
+
 
 
     def __get_the_form(self, table_index: str):
@@ -165,22 +194,6 @@ class SolveBySimpleIterationMethodTest(TestCase):
         if table_index == "55":
             return forms.Table55
 
-
-    def __get_dataset(self, table_index: str, blank: bool=False) -> dict:
-        dataset_keys_list = []
-        for row_index in range(1, int(table_index[0])+1):
-              for column_index in range(1, int(table_index[1])+1):
-                   dataset_keys_list.append("table"+table_index+"_row"+str(row_index)+"_column"+str(column_index))
-
-                   
-        data = {}   
-        if blank:
-            value = 0
-        else:
-            value = 123.1
-        for k in dataset_keys_list:
-            data[k] = value
-        return data
 
          
      
