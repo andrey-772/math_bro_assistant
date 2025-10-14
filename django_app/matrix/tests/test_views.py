@@ -99,7 +99,15 @@ class SolveBySimpleIterationMethodTest(TestCase):
 
 
     def test_render_with_right_context(self):
-        self.__create_and_fill_client_session()
+        self.__render_with_right_context(case1=True)
+        self.__render_with_right_context(case2=True)
+
+
+    def __render_with_right_context(self, case1: bool=False, case2: bool=False):
+        if case1:
+            self.__create_and_fill_client_session(for_method=True, blank=False)
+        elif case2:
+            self.__create_and_fill_client_session(for_method=False, blank=True)
         print("123")
         response = self.client.get("/solve_by_simple_iteration_method/")
         for i in ("context", "matrix_fields", "form1", "form2"):
@@ -113,15 +121,20 @@ class SolveBySimpleIterationMethodTest(TestCase):
         self.assertIsInstance(response.context["form1"], self.__get_the_form(table_index=f"{response.context['context']['row1']}{response.context['context']['column1']}"))
         self.assertIsInstance(response.context["form2"], self.__get_the_form(table_index=f"{response.context['context']['row2']}{response.context['context']['column2']}"))
         self.assertIsInstance(response.context["first_step"]["a"], float)
+        self.assertIsInstance(response.context["first_step"]["b"], float)
         self.assertIn(response.context["first_step"]["operator"], ["<", ">", "="])
         self.assertIn(response.context["first_step"]["message"], ["System is convergent", "System is not convergent"])
-        self.assertIsInstance(response.context["second_step"]["k1"], float)
-        self.assertIsInstance(response.context["second_step"]["k2"], int)
+        if response.context["first_step"]["message"] == "System is convergent" and response.context["first_step"]["b"] != 0 and response.context["first_step"]["a"] != 0:
+            self.assertIsInstance(response.context["second_step"]["k1"], float)
+            self.assertIsInstance(response.context["second_step"]["k2"], int)
+        else:
+            self.assertEqual(response.context["second_step"].get("k1"), None)
+            self.assertEqual(response.context["second_step"].get("k2"), None)
         
 
-    def __create_and_fill_client_session(self):
-        data_set = self.__get_dataset(table_index="33", for_method=True)
-        data_set2 = self.__get_dataset(table_index="31")
+    def __create_and_fill_client_session(self, for_method: bool=False,  blank:bool=False):
+        data_set = self.__get_dataset(table_index="33", for_method=for_method, blank=blank)
+        data_set2 = self.__get_dataset(table_index="31", blank=blank)
         data_set.update(data_set2)
         ss = self.client.session
         ss["form1_index"] = "33" 

@@ -87,20 +87,21 @@ def solve_by_simple_iteration_method(request):
     form1 = form1_obj()
     form2 = form2_obj()
     data = calculate_convergence(tables_data=request.session.get("matrix_fields_modified"))
-    request.session["first_step"]["a"], request.session["first_step"]["b"] = data[0], data[1]
-    k = calculate_k(a=data[0], b=data[1])
-    
-    if request.session["first_step"]["a"] < 1:
+    request.session["first_step"]["a"], request.session["first_step"]["b"] = data[0], data[1]    
+    if request.session["first_step"]["a"] < 1:  
         request.session["first_step"]["operator"] = "<"
         request.session["first_step"]["message"] = "System is convergent"
+        if request.session["first_step"]["b"] != 0 and request.session["first_step"]["a"] != 0:
+            k = calculate_k(a=data[0], b=data[1])
+            request.session["second_step"]["k1"] = round(k, 3)
+            request.session["second_step"]["k2"] = int(k)
     elif request.session["first_step"]["a"] > 1:
         request.session["first_step"]["operator"] = ">"
         request.session["first_step"]["message"] = "System is not convergent"
     else:
         request.session["first_step"]["operator"] = "="
         request.session["first_step"]["message"] = "System is not convergent"
-    request.session["second_step"]["k1"] = round(k, 3)
-    request.session["second_step"]["k2"] = int(k)
+    
     
     return render(request, "simple_iteration_method.html", context={"context": request.session.get("context"), "matrix_fields": request.session.get("matrix_fields"), "form1": form1, "form2": form2, "first_step": request.session["first_step"], "second_step": request.session["second_step"]})
 

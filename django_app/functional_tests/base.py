@@ -102,7 +102,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         return [max(row_values), max(row_values2)]
 
 
-    def get_dataset(self, table_index: str, small: bool=False, is_1: bool=False) -> list:
+    def get_dataset(self, table_index: str, small: bool=False, is_1: bool=False, is_0: bool=False) -> list:
         """
         the first element is the list for an internal manipulations, 
         the second element is the list for the external view
@@ -130,6 +130,9 @@ class FunctionalTest(StaticLiveServerTestCase):
             if is_1:
                 value = 1
                 value2 = 1
+            if is_0:
+                value = 0
+                value2 = 0
             data[k] = value
             data_2[k] = value2
 
