@@ -13,6 +13,7 @@ async function solve_by_simple_iteration_method() {
         const newBlock = doc.querySelector(".matrix-calculation-simple-iteration-method-block");
         document.querySelector(".matrix-calculation-simple-iteration-method-block").innerHTML = newBlock.innerHTML;
         document.getElementById("matrix-calculation-simple-iteration-method-anchor").click();
+        show_inner_elements_from_previous_page_properly();
         animate_solution();
         if (document.getElementById("matrix-calculation-simple-iteration-method-block-block-step1-4").textContent == "System is convergent")
         {
@@ -38,6 +39,8 @@ async function solve_by_simple_iteration_method() {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+
 async function animate_solution() {
     document.getElementById("matrix-calculation-simple-iteration-method-block-block-step1-1").style.display = "block"
     //await sleep(1000)
@@ -51,6 +54,47 @@ async function animate_solution() {
     //document.getElementById("matrix-calculation-simple-iteration-method-block-block-step1-4-anchor").click()
     //await sleep(1000)
     console.log(12)
+}
+
+
+function show_inner_elements_from_previous_page_properly() {
+    element1_text = parseFloat(document.getElementById("generate-the-matrix-block-table-section-button-1").textContent.trim());
+
+    element2_text = parseFloat(document.getElementById("generate-the-matrix-block-table-section-button-2").textContent.trim());
+
+    const elements_ids1 = ["generate-the-matrix-block-table-section-button-1-option-1",
+    "generate-the-matrix-block-table-section-button-1-option-2",
+    "generate-the-matrix-block-table-section-button-1-option-3",
+    "generate-the-matrix-block-table-section-button-1-option-4",
+    ]
+
+    const elements_ids2 = ["generate-the-matrix-block-table-section-button-2-option-1",
+        "generate-the-matrix-block-table-section-button-2-option-2",
+        "generate-the-matrix-block-table-section-button-2-option-3",
+        "generate-the-matrix-block-table-section-button-2-option-4",
+    ]
+
+    
+
+    elements_ids1.forEach(id => {
+        if (document.getElementById(id).classList.contains("active")) {
+            document.getElementById(id).classList.remove("active")
+        }
+        if (document.getElementById(id).textContent == element1_text) {
+            document.getElementById(id).classList.add("active")
+        }
+    })
+    
+    console.log(element1_text, "element1_text")
+    elements_ids2.forEach(id => {
+        if (document.getElementById(id).classList.contains("active")) {
+            document.getElementById(id).classList.remove("active")
+        }
+        if (document.getElementById(id).textContent == element2_text) {
+            document.getElementById(id).classList.add("active")
+        }
+    })
+    
 }
 
 
