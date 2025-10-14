@@ -1,0 +1,130 @@
+.top-frame {
+    user-select: none;
+}
+
+
+.generate-the-matrix-block {
+    margin-top: 5%;
+    user-select: none;
+}
+
+.generate-the-matrix-block-table {
+    padding-top: 5%;
+}
+
+.generate-the-matrix-block-table-row {
+    height: 100px;
+}
+
+.generate-the-matrix-block-table-section {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.generate-the-matrix-block-table-section-dropdown {
+    width: 200px;
+}
+
+.generate-the-matrix-block-button-generate-container {
+    padding-top: 5%;
+    padding-left: 80%
+}
+
+.generate-the-matrix-block-button-generate {
+    width: 60%;
+    font-size: 20px;
+}
+
+
+.matrix-table-block {
+    margin-top: 10%;
+    user-select: none;
+}
+
+.matrix-table-block-block1 {
+    width: 50%;
+}
+
+.matrix-table-block-block2 {
+    padding-left: 10%;
+    width: 30%;
+}
+
+.matrix-table-block-column {
+    width: 50px;
+    height: 50px;
+}
+
+.matrix-table-block-column-cell {
+    height: 100%;
+    width: 100%;
+    font-size: 20px;
+}
+
+.matrix-table-block-submit-button {
+    font-size: 20px;
+}
+
+
+.matrix-table-block-submit-button-container {
+    padding-top: 5%;
+    padding-left: 60%;
+}
+
+
+.matrix-calculation-simple-iteration-method-block {
+    margin-top: 5%;
+}
+
+
+#matrix-calculation-simple-iteration-method-main-text {
+    font-size: 45px;
+}
+
+.matrix-calculation-simple-iteration-method-block-block-step1-2 {
+    padding-top: 3%;
+}
+
+#matrix-calculation-simple-iteration-method-block-block-step1-1 {
+    display: none;
+}
+
+#matrix-calculation-simple-iteration-method-block-block-step1-2 {
+    display: none;
+}
+
+#matrix-calculation-simple-iteration-method-block-block-step1-3 {
+    display: none;
+}
+
+#matrix-calculation-simple-iteration-method-block-block-step1-4 {
+    display: none;
+}
+
+#matrix-calculation-simple-iteration-method-block-block-step2-1-error {
+    display: none;
+}
+
+
+.matrix-calculation-simple-iteration-method-block-block-step2-1 {
+    padding-top: 1%;
+}
+
+.matrix-calculation-simple-iteration-method-block-block-step2-2 {
+    padding-top: 3%;
+}
+
+#matrix-calculation-simple-iteration-method-block-block-step2-1 {
+    display: none;
+}
+
+
+#matrix-calculation-simple-iteration-method-block-block-step2-2 {
+    display: none;
+}
+
+
+#matrix-calculation-simple-iteration-method-block-block-step2-3 {
+    display: none;
+}
