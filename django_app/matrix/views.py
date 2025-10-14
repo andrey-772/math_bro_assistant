@@ -27,6 +27,7 @@ def generate_matrix_table(request):
         context["column2"] = int(data.get("column2"))
         request.session["context"] = context
         print("context", context)
+        print('return render(request, "base-matrix-table.html", {"context": context, "form1": form1, "form2": form2})')
         return render(request, "base-matrix-table.html", {"context": context, "form1": form1, "form2": form2})
     raise Http404
 

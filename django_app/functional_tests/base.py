@@ -6,6 +6,8 @@ from selenium.webdriver.common.keys import Keys
 import os
 import time
 import random
+import math
+
 
 MAX_WAIT = 10
 
@@ -138,3 +140,8 @@ class FunctionalTest(StaticLiveServerTestCase):
 
         return [data, data_2]
 
+
+    
+    def calculate_k(self, a:float, b:float) -> float:
+        equation = (math.log10(0.001) + math.log10(1-a) - math.log10(b))/math.log10(a)
+        return equation

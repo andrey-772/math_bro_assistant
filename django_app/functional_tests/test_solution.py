@@ -120,11 +120,17 @@ class TestSolution(FunctionalTest):
             print(dataset[0], dataset[1])
             data = self.calculate_convergence(dataset[0])
             a, b = data[0], data[1]
+            k = self.calculate_k(a=a, b=b)
+            
             self.wait_for(lambda: self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text))
             self.assertIn("<", self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text)
             self.assertIn(str(b), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-3").text)
             self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-4").text, "System is convergent")
             self.assertEqual(self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step2-1-text").text, "2. Calculating the iteration number")
+
+            self.assertIn(str(round(k, 3)), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step2-2").text)
+            self.assertIn(str(int(k)), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step2-3").text)
+
 
 
             if item_n < 5:
@@ -141,7 +147,7 @@ class TestSolution(FunctionalTest):
                 self.wait_for(lambda: self.browser.find_element(By.CLASS_NAME, "matrix-table-block-submit-button").click())
                 data = self.calculate_convergence(dataset[0])
                 a, b = data[0], data[1]
-                k = self.__calculate_k(a=a, b=b)
+                k = self.calculate_k(a=a, b=b)
                 print(str(round(k, 3)), int(k))
 
                 self.wait_for(lambda: self.assertIn(str(a), self.browser.find_element(By.ID, "matrix-calculation-simple-iteration-method-block-block-step1-2").text))
@@ -204,7 +210,3 @@ class TestSolution(FunctionalTest):
 
 
 
-
-    def __calculate_k(self, a:float, b:float):
-        equation = (math.log10(0.001) + math.log10(1-a) - math.log10(b))/math.log10(a)
-        return equation

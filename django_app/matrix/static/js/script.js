@@ -1,13 +1,9 @@
-console.log("js1")
 
-
-button1 = document.getElementById("generate-the-matrix-block-table-section-button-1")
-button2 = document.getElementById("generate-the-matrix-block-table-section-button-2")
 
 function load_send_matrix_table_button_event() {
     send_matrix_table_button = document.querySelector(".generate-the-matrix-block-button-generate");
     send_matrix_table_button.addEventListener("click", sendMatrixTable);
-}; 
+};
 
 
 async function sendMatrixTable() {
@@ -38,10 +34,9 @@ async function sendMatrixTable() {
         load_js_handlers();
     } catch (error) {
         console.error(error.message);
-        
+
     }
 }
-
 
 function load_js_handlers() {
 
@@ -56,23 +51,23 @@ function load_js_handlers() {
                 .replace(/(,)(?=.*\1)/g, '')
                 // 3. minus only at the beginning
                 .replace(/(?!^)-/g, '');
-     
+
         });
     });
 }
 
 
+
 function choose_another_option_button(button_obj_id, list_elem_obj_ids) {
     list_elem_obj_ids.forEach(id => {
         const elem_obj = document.getElementById(id);
-        const button_obj = document.getElementById(button_obj_id);
-        //elem_obj.classList.remove('active');
-        index = id.at(-1)
-        if (id.at(-1) == button_obj_id.at(-1)) {
-            button_obj.classList.add('active');
-        }
-    
-        if (button_obj_id != "generate-the-matrix-block-table-section-button-2") {
+        elem_obj.addEventListener("click", () => {
+            const button_obj = document.getElementById(button_obj_id);
+            list_elem_obj_ids.forEach(otherId => {
+                document.getElementById(otherId).classList.remove('active');
+            });
+            elem_obj.classList.add('active');
+            if (button_obj_id != "generate-the-matrix-block-table-section-button-2") {
                 if (button_obj_id == "generate-the-matrix-block-table-section-button-1") {
                     const button_obj2 = document.getElementById("generate-the-matrix-block-table-section-button-3")
                     button_obj.textContent = elem_obj.textContent
@@ -83,22 +78,19 @@ function choose_another_option_button(button_obj_id, list_elem_obj_ids) {
                     button_obj.textContent = elem_obj.textContent
                     button_obj2.textContent = elem_obj.textContent
                 }
-                
-        } else {
+
+            } else {
                 console.log(elem_obj)
-            button_obj.textContent = elem_obj.textContent;
-        }
+                button_obj.textContent = elem_obj.textContent
+            }
 
-
-            
+        });
     });
 }
 
 
 load_send_matrix_table_button_event();
-button1.addEventListener("click", () => {
-    choose_another_option_button("generate-the-matrix-block-table-section-button-1", ["generate-the-matrix-block-table-section-button-1-option-1", "generate-the-matrix-block-table-section-button-1-option-2", "generate-the-matrix-block-table-section-button-1-option-3", "generate-the-matrix-block-table-section-button-1-option-4"])
-})
-button2.addEventListener("click", () => {
-    choose_another_option_button("generate-the-matrix-block-table-section-button-2", ["generate-the-matrix-block-table-section-button-2-option-1", "generate-the-matrix-block-table-section-button-2-option-2", "generate-the-matrix-block-table-section-button-2-option-3", "generate-the-matrix-block-table-section-button-2-option-4"])
-})
+choose_another_option_button("generate-the-matrix-block-table-section-button-1", ["generate-the-matrix-block-table-section-button-1-option-1", "generate-the-matrix-block-table-section-button-1-option-2", "generate-the-matrix-block-table-section-button-1-option-3", "generate-the-matrix-block-table-section-button-1-option-4"])
+choose_another_option_button("generate-the-matrix-block-table-section-button-2", ["generate-the-matrix-block-table-section-button-2-option-1", "generate-the-matrix-block-table-section-button-2-option-2", "generate-the-matrix-block-table-section-button-2-option-3", "generate-the-matrix-block-table-section-button-2-option-4"])
+
+
