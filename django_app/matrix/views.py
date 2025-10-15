@@ -59,7 +59,7 @@ def simple_iteration_method(request):
                         continue
                     new_field_value += s
                 form_data_modified[m_field_name] = float(new_field_value) 
-        request.session["matrix_fields"][field_name] = field_value
+        request.session["matrix_fields"][field_name] = field_value    
     request.session["matrix_fields_modified"] = form_data_modified
     c = 0
     for k, v in form_data_modified.items():
@@ -96,16 +96,15 @@ def solve_by_simple_iteration_method(request):
             k = calculate_k(a=data[0], b=data[1])
             request.session["second_step"]["k1"] = round(k, 3)
             request.session["second_step"]["k2"] = int(k)
+            request.session["second_step"]["columns_n"] = int(k)
+            request.session["second_step"]["table"] = {}
     elif request.session["first_step"]["a"] > 1:
         request.session["first_step"]["operator"] = ">"
         request.session["first_step"]["message"] = "System is not convergent"
     else:
         request.session["first_step"]["operator"] = "="
-        request.session["first_step"]["message"] = "System is not convergent"
-    
-    
+        request.session["first_step"]["message"] = "System is not convergent"    
     return render(request, "simple_iteration_method.html", context={"context": request.session.get("context"), "matrix_fields": request.session.get("matrix_fields"), "form1": form1, "form2": form2, "first_step": request.session["first_step"], "second_step": request.session["second_step"]})
-
 
 
 def get_the_form(table_index: str):

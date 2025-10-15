@@ -127,9 +127,17 @@ class SolveBySimpleIterationMethodTest(TestCase):
         if response.context["first_step"]["message"] == "System is convergent" and response.context["first_step"]["b"] != 0 and response.context["first_step"]["a"] != 0:
             self.assertIsInstance(response.context["second_step"]["k1"], float)
             self.assertIsInstance(response.context["second_step"]["k2"], int)
+            self.assertIsInstance(response.context["second_step"]["columns_n"], int)
+            self.assertIn(len(response.context["second_step"]["table"]), [3, 4, 5, 6])
+            for k1 in response.context["second_step"]["table"].keys():
+                self.assertIn(k1, ["x1", "x2", "x3", "x4", "x5", "delta"])
+                for k2 in response.context["second_step"][k1].keys():
+                    self.assertIsInstance(int(k2), int)
+                    self.assertIsInstance(response.context["second_step"][k1][k2], float)
         else:
             self.assertEqual(response.context["second_step"].get("k1"), None)
             self.assertEqual(response.context["second_step"].get("k2"), None)
+        
         
 
     def __create_and_fill_client_session(self, for_method: bool=False,  blank:bool=False):

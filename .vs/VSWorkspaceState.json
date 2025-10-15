@@ -2,16 +2,16 @@
   "ExpandedNodes": [
     "",
     "\\django_app",
+    "\\django_app\\functional_tests",
     "\\django_app\\math_bro_assistant",
     "\\django_app\\matrix",
     "\\django_app\\matrix\\static",
-    "\\django_app\\matrix\\static\\css",
-    "\\django_app\\matrix\\static\\images",
-    "\\django_app\\matrix\\static\\images\\formulas",
+    "\\django_app\\matrix\\static\\js",
     "\\django_app\\matrix\\templates",
     "\\django_app\\matrix\\templates\\includes",
-    "\\django_app\\matrix\\templates\\includes\\templates_matrix_tables"
+    "\\django_app\\matrix\\templates\\includes\\templates_matrix_tables",
+    "\\django_app\\matrix\\tests"
   ],
-  "SelectedNode": "\\django_app\\matrix\\static\\images\\formulas",
+  "SelectedNode": "\\django_app\\functional_tests\\base.py",
   "PreviewInSolutionExplorer": false
 }
