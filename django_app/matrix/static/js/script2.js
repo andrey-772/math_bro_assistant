@@ -27,6 +27,7 @@ async function solve_by_simple_iteration_method() {
                 document.getElementById("matrix-calculation-simple-iteration-method-block-block-step2-1").style.display = "block"
                 document.getElementById("matrix-calculation-simple-iteration-method-block-block-step2-2").style.display = "block"
                 document.getElementById("matrix-calculation-simple-iteration-method-block-block-step2-3").style.display = "block"
+                document.getElementById("matrix-calculation-simple-iteration-method-block-block-step2-4").style.display = "block"
             }
         };
      

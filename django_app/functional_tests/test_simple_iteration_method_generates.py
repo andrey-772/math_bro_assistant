@@ -168,3 +168,4 @@ class TestSimpleIterationSolution(FunctionalTest):
         for k in dataset_keys_list:
             data[k] = value
         return data
+
