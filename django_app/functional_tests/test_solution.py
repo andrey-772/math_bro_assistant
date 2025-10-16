@@ -2,6 +2,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
+import copy
 import time
 
 class InvalidKeys(Exception):
@@ -86,22 +87,25 @@ class TestSolution(FunctionalTest):
                 elements_arr_row1 = []
                 element_arr_matrixB = []
                 self.browser.execute_script("window.scrollBy(0, -300);")
-                for i in range(1, row_n):
-                    element_text = self.browser.find_element(By.NAME, f"table{table_index}_row{i}_column1")
+                time.sleep(15)
+                for i in range(1, row_n+1):
+                    element_text = self.browser.find_element(By.NAME, f"table{table_index}_row{i}_column1").get_attribute("value")
                     element_arr_matrixB.append(element_text)
+                    print("element_text", element_text)
+                print(element_arr_matrixB)
                 self.browser.execute_script("window.scrollBy(0, 300);")
                 i = 0
                 while i < row_n+3:
                      i += 1
-                     element_text = self.browser.find_element(By.NAME, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-1-{i}").text
+                     element_text = self.browser.find_element(By.ID, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-1-{i}").text
                      elements_arr_row1.append(element_text)
-                r = 0
+                r = 1
                 i = 0
                 k = 0
                 obj_len = row_n + 3
                 matrixA, matrixB =  self.__collect_data_from_matrix_tables(dataset[0])
-                data = self.__calculate_iteration(matrix_A=matrixA, matrix_B=matrixB, k=k_index)
-                while r < k_index+2:
+                data = self.__calculate_iteration(matrix_A=matrixA, matrix_B=matrixB, k_index=k_index)
+                while r < k_index+3:
                     if r == 1:
                         self.assertEqual(elements_arr_row1[0], "k")
                         self.assertEqual(elements_arr_row1[-1], "")
@@ -120,15 +124,15 @@ class TestSolution(FunctionalTest):
                         while e < obj_len:
                             e += 1
                             c += 1
-                            
+                            #time.sleep(15)
                             if e == 1:
-                                self.assertEqual(int(self.browser.find_element(By.NAME, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text), k)
+                                self.assertEqual(int(float(self.browser.find_element(By.ID, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text)), k)
                             elif e == obj_len-1:
-                                self.assertEqual(int(self.browser.find_element(By.NAME, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text), "-")
+                                self.assertEqual(int(float(self.browser.find_element(By.ID, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text)), "-")
                             elif e == obj_len:
-                                self.assertEqual(int(self.browser.find_element(By.NAME, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text), "")
+                                self.assertEqual(int(float(self.browser.find_element(By.ID, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text)), "")
                             else:
-                                self.assertEqual(int(self.browser.find_element(By.NAME, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text), element_arr_matrixB[i])
+                                self.assertEqual(int(float(self.browser.find_element(By.ID, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text)), element_arr_matrixB[i])
                                 i += 1
                     else:
                         e = 0
@@ -138,11 +142,11 @@ class TestSolution(FunctionalTest):
                             e += 1
                             c += 1
                             if e == 1:
-                                self.assertEqual(int(self.browser.find_element(By.NAME, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text), k)
+                                self.assertEqual(int(float(self.browser.find_element(By.ID, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text)), k)
                             elif e == obj_len:
-                                self.assertEqual(int(self.browser.find_element(By.NAME, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text), "")
+                                self.assertEqual(int(float(self.browser.find_element(By.ID, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text)), "")
                             else:
-                                self.assertEqual(int(self.browser.find_element(By.NAME, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text), data[str(r-2)][f"x{i}"]) 
+                                self.assertEqual(int(float(self.browser.find_element(By.ID, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text)), data[str(r-2)][f"x{i}"]) 
                                 i += 1
                     r += 1
                 
@@ -180,6 +184,7 @@ class TestSolution(FunctionalTest):
         return [form_data[str(table_indexes[0])], form_data[str(table_indexes[1])]]
 
 
+    
     def __calculate_iteration(self, matrix_A: dict, matrix_B: dict, k_index: int=0) -> dict:
          """
          expects the matrix elements in the format as matrix has tableXX, that has row1, row2, row3, .., rown
@@ -217,17 +222,23 @@ class TestSolution(FunctionalTest):
          elements_in_row = []
          elements_in_row2 = []
          c = 0
-         for table_row in table.values():    
-             for value in table_row.values():
+         for index, table_row in table.items():
+             table_row_copy = copy.deepcopy(table_row)
+             for value in table_row_copy.values():
                  if len(elements_in_row) >= x_amount:
                      elements_in_row2.append(value)
                  else:
                      elements_in_row.append(value)
+             if c == 0:
+                 table_row_copy["delta"] = "-"
              if c > 0:
                 print(elements_in_row, elements_in_row2)
-                table_row["delta"] = abs(max(elements_in_row2)-max(elements_in_row)) 
+                table_row_copy["delta"] = abs(max(elements_in_row2)-max(elements_in_row)) 
                 elements_in_row = elements_in_row2
                 elements_in_row2 = []
+             table_row_copy["k"] = c
+             table_row_copy["row_index"] = c + 2
+             table[index] = table_row_copy
              c += 1
          return table
            

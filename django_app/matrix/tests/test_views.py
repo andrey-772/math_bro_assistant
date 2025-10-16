@@ -157,14 +157,20 @@ class SolveBySimpleIterationMethodTest(TestCase):
         data = self.solveBySimpleIterationMethod.collect_data_from_matrix_tables(tables_data=data_set)
 
         table_data = self.solveBySimpleIterationMethod.calculate_iteration(matrix_A=data[0], matrix_B=data[1], k_index=int(response.context["second_step"]["k2"]))
-        print(table_data, " data __collect_data_from_matrix_tables")
+        print(data, " data __collect_data_from_matrix_tables")
         self.assertEqual(len(response.context["second_step"]["table"]), response.context["second_step"]["k2"])
-        self.assertIn(len(response.context["second_step"]["rows_amount"], [2, 3, 4, 5]))
+        self.assertIn(response.context["second_step"]["rows_amount"], [2, 3, 4, 5])
         for k1 in response.context["second_step"]["table"].keys():
             self.assertIsInstance(int(k1), int)
             for k2 in response.context["second_step"]["table"][k1].keys():
-                self.assertIn(k2, ["x1", "x2", "x3", "x4", "x5", "delta"])
-                self.assertIsInstance(response.context["second_step"]["table"][k1][k2], float)
+                self.assertIn(k2, ["k", "x1", "x2", "x3", "x4", "x5", "delta", "row_index"])
+                if k2 not in ["k", "row_index"]:
+                    if k2 == "delta":
+                        self.assertTrue(response.context["second_step"]["table"][k1][k2] ==  "-" or type(response.context["second_step"]["table"][k1][k2]) is float)
+                    else:
+                        self.assertIsInstance(response.context["second_step"]["table"][k1][k2], float)
+                else:
+                    self.assertIsInstance(response.context["second_step"]["table"][k1][k2], int)
                 self.assertEqual(response.context["second_step"]["table"][k1][k2], table_data[k1][k2])
 
 

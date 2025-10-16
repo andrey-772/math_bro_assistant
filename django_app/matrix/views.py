@@ -93,8 +93,7 @@ def solve_by_simple_iteration_method(request):
             k=business_logic.calculate_k(a=request.session["first_step"]["a"],b=request.session["first_step"]["b"]) 
             request.session["second_step"]["k1"] = round(k, 3)
             request.session["second_step"]["k2"] = int(k)
-            request.session["second_step"]["columns_n"] = int(k)
-
+            request.session["second_step"]["rows_amount"] = int(request.session["context"]["row2"])
             data = business_logic.collect_data_from_matrix_tables(tables_data=request.session.get("matrix_fields_modified"))
             table_data = business_logic.calculate_iteration(matrix_A=data[0], matrix_B=data[1], k_index=request.session["second_step"]["k2"])
             request.session["second_step"]["table"] = table_data
