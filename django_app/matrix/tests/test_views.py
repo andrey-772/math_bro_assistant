@@ -159,6 +159,7 @@ class SolveBySimpleIterationMethodTest(TestCase):
         table_data = self.solveBySimpleIterationMethod.calculate_iteration(matrix_A=data[0], matrix_B=data[1], k_index=int(response.context["second_step"]["k2"]))
         print(table_data, " data __collect_data_from_matrix_tables")
         self.assertEqual(len(response.context["second_step"]["table"]), response.context["second_step"]["k2"])
+        self.assertIn(len(response.context["second_step"]["rows_amount"], [2, 3, 4, 5]))
         for k1 in response.context["second_step"]["table"].keys():
             self.assertIsInstance(int(k1), int)
             for k2 in response.context["second_step"]["table"][k1].keys():
