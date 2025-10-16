@@ -2,9 +2,7 @@ from django.http import Http404
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 import json
-from . import forms
-import math
-
+from . import business_logic
 
 def main_page(request):
     del request.session
@@ -17,8 +15,8 @@ def generate_matrix_table(request):
     if request.method == "POST":
         context = {}
         data = json.loads(request.body)
-        form1_obj = get_the_form(str(int(data.get("row1")))+str(int(data.get("column1"))))
-        form2_obj = get_the_form(str(int(data.get("row2")))+str(int(data.get("column2"))))
+        form1_obj = business_logic.get_the_form(str(int(data.get("row1")))+str(int(data.get("column1"))))
+        form2_obj = business_logic.get_the_form(str(int(data.get("row2")))+str(int(data.get("column2"))))
         form1 = form1_obj()
         form2 = form2_obj()
         context["row1"] = int(data.get("row1"))
@@ -70,8 +68,8 @@ def simple_iteration_method(request):
             form_data_for_first_table[k[8:]] = v
         elif c == 2:
             form_data_for_second_table[k[8:]] = v
-    form_class1 = get_the_form(table_index=table_indexes[0])
-    form_class2 = get_the_form(table_index=table_indexes[1])
+    form_class1 = business_logic.get_the_form(table_index=table_indexes[0])
+    form_class2 = business_logic.get_the_form(table_index=table_indexes[1])
     form1 = form_class1(form_data_for_first_table)
     form2 = form_class2(form_data_for_second_table)
     request.session["form1_index"] = table_indexes[0]
@@ -83,21 +81,23 @@ def simple_iteration_method(request):
 def solve_by_simple_iteration_method(request):
     request.session["first_step"] = {}
     request.session["second_step"] = {}
-    form1_obj = get_the_form(request.session.get("form1_index"))
-    form2_obj = get_the_form(request.session.get("form2_index"))
+    form1_obj = business_logic.get_the_form(request.session.get("form1_index"))
+    form2_obj = business_logic.get_the_form(request.session.get("form2_index"))
     form1 = form1_obj()
     form2 = form2_obj()
-    data = calculate_convergence(tables_data=request.session.get("matrix_fields_modified"))
-    request.session["first_step"]["a"], request.session["first_step"]["b"] = data[0], data[1]    
+    request.session["first_step"]["a"], request.session["first_step"]["b"] = business_logic.calculate_convergence(tables_data=request.session.get("matrix_fields_modified")) 
     if request.session["first_step"]["a"] < 1:  
         request.session["first_step"]["operator"] = "<"
         request.session["first_step"]["message"] = "System is convergent"
         if request.session["first_step"]["b"] != 0 and request.session["first_step"]["a"] != 0:
-            k = calculate_k(a=data[0], b=data[1])
+            k=business_logic.calculate_k(a=request.session["first_step"]["a"],b=request.session["first_step"]["b"]) 
             request.session["second_step"]["k1"] = round(k, 3)
             request.session["second_step"]["k2"] = int(k)
             request.session["second_step"]["columns_n"] = int(k)
-            request.session["second_step"]["table"] = {}
+
+            data = business_logic.collect_data_from_matrix_tables(tables_data=request.session.get("matrix_fields_modified"))
+            table_data = business_logic.calculate_iteration(matrix_A=data[0], matrix_B=data[1], k_index=request.session["second_step"]["k2"])
+            request.session["second_step"]["table"] = table_data
     elif request.session["first_step"]["a"] > 1:
         request.session["first_step"]["operator"] = ">"
         request.session["first_step"]["message"] = "System is not convergent"
@@ -107,105 +107,3 @@ def solve_by_simple_iteration_method(request):
     return render(request, "simple_iteration_method.html", context={"context": request.session.get("context"), "matrix_fields": request.session.get("matrix_fields"), "form1": form1, "form2": form2, "first_step": request.session["first_step"], "second_step": request.session["second_step"]})
 
 
-def get_the_form(table_index: str):
-    if table_index == "21":
-        return forms.Table21
-    if table_index == "22":
-        return forms.Table22
-    if table_index == "23":
-        return forms.Table23
-    if table_index == "24":
-        return forms.Table24
-    if table_index == "25":
-        return forms.Table25
-    if table_index == "31":
-        return forms.Table31
-    if table_index == "32":
-        return forms.Table32
-    if table_index == "33":
-        return forms.Table33
-    if table_index == "34":
-        return forms.Table34
-    if table_index == "35":
-        return forms.Table35
-    if table_index == "41":
-        return forms.Table41
-    if table_index == "42":
-        return forms.Table42
-    if table_index == "43":
-        return forms.Table43
-    if table_index == "44":
-        return forms.Table44
-    if table_index == "45":
-        return forms.Table45
-    if table_index == "51":
-        return forms.Table51
-    if table_index == "52":
-        return forms.Table52
-    if table_index == "53":
-        return forms.Table53
-    if table_index == "54":
-        return forms.Table54
-    if table_index == "55":
-        return forms.Table55
-
-
-
-def calculate_convergence(tables_data: dict) -> list:
-        """
-        The first element of the list is the value of matrix table A,
-        the second element of the list is the value of matrix table B
-        """
-        table_indexes = []
-        form_data = {}
-        rows_table_1 = []
-        rows_table_2 = []
-        c = 0
-        for k, v in tables_data.items():
-            if k[5:7] not in table_indexes:
-                c += 1
-                table_indexes.append(k[5:7])
-            if c == 1:
-                if k[8:11] not in rows_table_1:
-                    rows_table_1.append(k[8:11])
-                if form_data.get(str(table_indexes[0])) is None:
-                    form_data[str(table_indexes[0])] = {}
-                if form_data[str(table_indexes[0])].get(k[8:11]) is None:
-                    form_data[str(table_indexes[0])][k[8:11]] = []
-                form_data[str(table_indexes[0])][k[8:11]].append(v)
-            elif c == 2:
-                if k[8:11] not in rows_table_2:
-                    rows_table_2.append(k[8:11])
-                if form_data.get(str(table_indexes[1])) is None:
-                    form_data[str(table_indexes[1])] = {}
-                if form_data[str(table_indexes[1])].get(k[8:11]) is None:
-                    form_data[str(table_indexes[1])][k[8:11]] = []
-                form_data[str(table_indexes[1])][k[8:11]].append(v)
-
-
-        row_values = []
-        for row in rows_table_1:
-            row_abs = []
-            for i in form_data[table_indexes[0]][row]:
-                row_abs.append(abs(float(i)))
-            row_values.append(max(row_abs))
-            
-        row_values2 = []
-        for row in rows_table_2:
-            row_abs = []
-            for i in form_data[table_indexes[1]][row]:
-                row_abs.append(abs(float(i)))
-            row_values2.append(max(row_abs))
-
-        return [max(row_values), max(row_values2)]
-
-
-def calculate_k(a:float, b:float):
-    print(a, "calculate_k B")
-    equation = (math.log10(0.001) + math.log10(1-a) - math.log10(b))/math.log10(a)
-    return equation
-
-
-
-
-       

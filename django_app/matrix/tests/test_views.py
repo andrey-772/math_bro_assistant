@@ -1,7 +1,7 @@
 from django.test import TestCase
-from matrix import forms
-from django.contrib.sessions.backends.db import SessionStore
 import json
+from . import test_views_additional_logic
+
 
 
 class MainPageTest(TestCase):
@@ -55,7 +55,7 @@ class SimpleIterationMethodTest(TestCase):
 
 
     def __create_and_fill_client_session(self):
-        data_set = self.__get_dataset(table_index="33", for_method=True)
+        data_set = self.__get_dataset(table_index="33", for_method=False)
         data_set2 = self.__get_dataset(table_index="31")
         data_set.update(data_set2)
         ss = self.client.session
@@ -86,64 +86,88 @@ class SimpleIterationMethodTest(TestCase):
         return data
 
 
-
-         
-     
-
-
 class SolveBySimpleIterationMethodTest(TestCase):
+    def setUp(self):
+        self.solveBySimpleIterationMethod = test_views_additional_logic.SolveBySimpleIterationMethod()
+        data_set = self.solveBySimpleIterationMethod.get_dataset(table_index="33")
+        data_set2 = self.solveBySimpleIterationMethod.get_dataset(table_index="31")
+        data_set.update(data_set2)
+        self.__create_and_fill_client_session(data_set)
+        self.response = self.client.get("/solve_by_simple_iteration_method/")
+        
+
     def test_renders_right_template(self):
-        self.__create_and_fill_client_session()
         response = self.client.get("/solve_by_simple_iteration_method/")
         self.assertTemplateUsed(response, "simple_iteration_method.html") 
 
 
-    def test_render_with_right_context(self):
-        self.__render_with_right_context(case1=True)
-        self.__render_with_right_context(case2=True)
+    def test_returns_all_end_points(self):
+        for i in ("context", "matrix_fields", "form1", "form2", "first_step", "second_step"):
+            self.assertIn(i, self.response.context)
 
 
-    def __render_with_right_context(self, case1: bool=False, case2: bool=False):
-        if case1:
-            self.__create_and_fill_client_session(for_method=True, blank=False)
-        elif case2:
-            self.__create_and_fill_client_session(for_method=False, blank=True)
-        print("123")
-        response = self.client.get("/solve_by_simple_iteration_method/")
-        for i in ("context", "matrix_fields", "form1", "form2"):
-            self.assertIn(i, response.context)
-        for i in response.context["context"].values():
-            self.assertIn(int(i), (1, 2, 3, 4))
-        for i in response.context["context"].keys():
-            self.assertIn(i, ("row1", "row2", "column1", "column2"))
-        for i in response.context["matrix_fields"].values():
-            self.assertNotEqual(i, "")
-        self.assertIsInstance(response.context["form1"], self.__get_the_form(table_index=f"{response.context['context']['row1']}{response.context['context']['column1']}"))
-        self.assertIsInstance(response.context["form2"], self.__get_the_form(table_index=f"{response.context['context']['row2']}{response.context['context']['column2']}"))
-        self.assertIsInstance(response.context["first_step"]["a"], float)
-        self.assertIsInstance(response.context["first_step"]["b"], float)
-        self.assertIn(response.context["first_step"]["operator"], ["<", ">", "="])
-        self.assertIn(response.context["first_step"]["message"], ["System is convergent", "System is not convergent"])
-        if response.context["first_step"]["message"] == "System is convergent" and response.context["first_step"]["b"] != 0 and response.context["first_step"]["a"] != 0:
-            self.assertIsInstance(response.context["second_step"]["k1"], float)
-            self.assertIsInstance(response.context["second_step"]["k2"], int)
-            self.assertIsInstance(response.context["second_step"]["columns_n"], int)
-            self.assertIn(len(response.context["second_step"]["table"]), [3, 4, 5, 6])
-            for k1 in response.context["second_step"]["table"].keys():
-                self.assertIn(k1, ["x1", "x2", "x3", "x4", "x5", "delta"])
-                for k2 in response.context["second_step"][k1].keys():
-                    self.assertIsInstance(int(k2), int)
-                    self.assertIsInstance(response.context["second_step"][k1][k2], float)
-        else:
-            self.assertEqual(response.context["second_step"].get("k1"), None)
-            self.assertEqual(response.context["second_step"].get("k2"), None)
-        
-        
-
-    def __create_and_fill_client_session(self, for_method: bool=False,  blank:bool=False):
-        data_set = self.__get_dataset(table_index="33", for_method=for_method, blank=blank)
-        data_set2 = self.__get_dataset(table_index="31", blank=blank)
+    def test_calculate_convergence_business_logic(self):
+        self.assertIsInstance(self.response.context["first_step"]["a"], float)
+        self.assertIsInstance(self.response.context["first_step"]["b"], float)
+        self.assertIsInstance(self.response.context["first_step"]["message"], str)
+                
+        data_set = self.solveBySimpleIterationMethod.get_dataset(table_index="33", blank=True)
+        data_set2 = self.solveBySimpleIterationMethod.get_dataset(table_index="31", blank=True)
         data_set.update(data_set2)
+        self.__create_and_fill_client_session(data_set)
+        response = self.client.get("/solve_by_simple_iteration_method/")
+        self.assertEqual(response.context["first_step"]["operator"], "<")
+        self.assertEqual(response.context["first_step"]["message"], "System is convergent")
+
+
+        data_set = self.solveBySimpleIterationMethod.get_dataset(table_index="33", is_1=True)
+        data_set2 = self.solveBySimpleIterationMethod.get_dataset(table_index="31", is_1=True)
+        data_set.update(data_set2)
+        self.__create_and_fill_client_session(data_set)
+        response = self.client.get("/solve_by_simple_iteration_method/")
+        self.assertEqual(response.context["first_step"]["operator"], "=")
+        self.assertEqual(response.context["first_step"]["message"], "System is not convergent")
+
+
+        data_set = self.solveBySimpleIterationMethod.get_dataset(table_index="33")
+        data_set2 = self.solveBySimpleIterationMethod.get_dataset(table_index="31")
+        data_set.update(data_set2)
+        self.__create_and_fill_client_session(data_set)
+        response = self.client.get("/solve_by_simple_iteration_method/")
+        self.assertEqual(response.context["first_step"]["operator"], ">")
+        self.assertEqual(response.context["first_step"]["message"], "System is not convergent")
+
+
+    def test_forms_are_fine(self):
+        self.assertIsInstance(self.response.context["form1"], self.solveBySimpleIterationMethod.get_the_form(table_index=f"{self.response.context['context']['row1']}{self.response.context['context']['column1']}"))
+        self.assertIsInstance(self.response.context["form2"], self.solveBySimpleIterationMethod.get_the_form(table_index=f"{self.response.context['context']['row2']}{self.response.context['context']['column2']}"))
+
+
+    def test_business_logic_iteration_part(self):
+        data_set = self.solveBySimpleIterationMethod.get_dataset(table_index="33", for_method=True)
+        data_set2 = self.solveBySimpleIterationMethod.get_dataset(table_index="31", for_method=True)
+        data_set.update(data_set2)
+        self.__create_and_fill_client_session(data_set)
+        response = self.client.get("/solve_by_simple_iteration_method/")
+
+
+        self.assertIsInstance(response.context["second_step"]["k1"], float)
+        self.assertIsInstance(response.context["second_step"]["k2"], int)
+
+        data = self.solveBySimpleIterationMethod.collect_data_from_matrix_tables(tables_data=data_set)
+
+        table_data = self.solveBySimpleIterationMethod.calculate_iteration(matrix_A=data[0], matrix_B=data[1], k_index=int(response.context["second_step"]["k2"]))
+        print(table_data, " data __collect_data_from_matrix_tables")
+        self.assertEqual(len(response.context["second_step"]["table"]), response.context["second_step"]["k2"])
+        for k1 in response.context["second_step"]["table"].keys():
+            self.assertIsInstance(int(k1), int)
+            for k2 in response.context["second_step"]["table"][k1].keys():
+                self.assertIn(k2, ["x1", "x2", "x3", "x4", "x5", "delta"])
+                self.assertIsInstance(response.context["second_step"]["table"][k1][k2], float)
+                self.assertEqual(response.context["second_step"]["table"][k1][k2], table_data[k1][k2])
+
+
+    def __create_and_fill_client_session(self, data_set: dict):
         ss = self.client.session
         ss["form1_index"] = "33" 
         ss["form2_index"] = "31"
@@ -152,69 +176,7 @@ class SolveBySimpleIterationMethodTest(TestCase):
         ss["matrix_fields_modified"] = data_set
         ss.save()
 
+
     
-    def __get_dataset(self, table_index: str, blank: bool=False, for_method: bool=False) -> dict:
-        dataset_keys_list = []
-        for row_index in range(1, int(table_index[0])+1):
-              for column_index in range(1, int(table_index[1])+1):
-                   dataset_keys_list.append("table"+table_index+"_row"+str(row_index)+"_column"+str(column_index))
-
-                   
-        data = {}   
-        if blank:
-            value = 0
-        elif for_method:
-            value = 0.5
-        else:
-            value = 123.1
-        for k in dataset_keys_list:
-            data[k] = value
-        return data
-
-
-
-    def __get_the_form(self, table_index: str):
-        if table_index == "21":
-            return forms.Table21
-        if table_index == "22":
-            return forms.Table22
-        if table_index == "23":
-            return forms.Table23
-        if table_index == "24":
-            return forms.Table24
-        if table_index == "25":
-            return forms.Table25
-        if table_index == "31":
-            return forms.Table31
-        if table_index == "32":
-            return forms.Table32
-        if table_index == "33":
-            return forms.Table33
-        if table_index == "34":
-            return forms.Table34
-        if table_index == "35":
-            return forms.Table35
-        if table_index == "41":
-            return forms.Table41
-        if table_index == "42":
-            return forms.Table42
-        if table_index == "43":
-            return forms.Table43
-        if table_index == "44":
-            return forms.Table44
-        if table_index == "45":
-            return forms.Table45
-        if table_index == "51":
-            return forms.Table51
-        if table_index == "52":
-            return forms.Table52
-        if table_index == "53":
-            return forms.Table53
-        if table_index == "54":
-            return forms.Table54
-        if table_index == "55":
-            return forms.Table55
-
-
          
      

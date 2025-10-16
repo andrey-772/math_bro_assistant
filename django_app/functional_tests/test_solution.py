@@ -180,25 +180,26 @@ class TestSolution(FunctionalTest):
         return [form_data[str(table_indexes[0])], form_data[str(table_indexes[1])]]
 
 
-    def __calculate_iteration(self, matrix_A: dict, matrix_B: dict, k: int=0) -> dict:
+    def __calculate_iteration(self, matrix_A: dict, matrix_B: dict, k_index: int=0) -> dict:
          """
          expects the matrix elements in the format as matrix has tableXX, that has row1, row2, row3, .., rown
          """
          table = {}
          i = 0
-         x_amount = len(matrix_B)
+         x_amount = len(matrix_B["row"])
+         print(x_amount, type(x_amount), "x_amount")
          for k in matrix_A.keys():
             if not matrix_A.get(k):
                 raise InvalidKeys(message="matrix_A is broken")
          if x_amount == 2:  
-             table_row = {"x1", "x2"}
+             table_row = {"x1": {}, "x2": {}}
          elif x_amount == 3:
-             table_row = {"x1", "x2", "x3"}
+             table_row = {"x1": {}, "x2": {}, "x3": {}}
          elif x_amount == 4:
-             table_row = {"x1", "x2", "x3", "x4"}
+             table_row = {"x1": {}, "x2": {}, "x3": {}, "x4": {}}
          elif x_amount == 5:
-             table_row = {"x1", "x2", "x3", "x4", "x5"}
-         while i < k: 
+             table_row = {"x1": {}, "x2": {}, "x3": {}, "x4": {}, "x5": {}}
+         while i < k_index: 
              table[str(i)] = table_row
              for r in table[str(i)].keys():
                  res = 0 
@@ -206,7 +207,7 @@ class TestSolution(FunctionalTest):
                      if i == 0:
                          table[str(i)][r] = matrix_B[k]
                          continue
-                     for v in matrix_A[k].values():
+                     for v in matrix_A[k]:
                           if not table[str(i)].get(r):
                               res += v * table[str(i)][r]
                           else:
@@ -215,14 +216,20 @@ class TestSolution(FunctionalTest):
              i += 1
          elements_in_row = []
          elements_in_row2 = []
-         for table_row in table.values():
+         c = 0
+         for table_row in table.values():    
              for value in table_row.values():
-                 if len(elements_in_row) == x_amount:
+                 if len(elements_in_row) >= x_amount:
                      elements_in_row2.append(value)
                  else:
                      elements_in_row.append(value)
-             table_row["delta"] = abs(max(elements_in_row2)-max(elements_in_row)) 
-             elements_in_row = elements_in_row2
-             elements_in_row2 = []
+             if c > 0:
+                print(elements_in_row, elements_in_row2)
+                table_row["delta"] = abs(max(elements_in_row2)-max(elements_in_row)) 
+                elements_in_row = elements_in_row2
+                elements_in_row2 = []
+             c += 1
          return table
            
+
+
