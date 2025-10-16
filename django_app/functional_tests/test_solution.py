@@ -87,7 +87,6 @@ class TestSolution(FunctionalTest):
                 elements_arr_row1 = []
                 element_arr_matrixB = []
                 self.browser.execute_script("window.scrollBy(0, -300);")
-                time.sleep(15)
                 for i in range(1, row_n+1):
                     element_text = self.browser.find_element(By.NAME, f"table{table_index}_row{i}_column1").get_attribute("value")
                     element_arr_matrixB.append(element_text)
@@ -124,7 +123,6 @@ class TestSolution(FunctionalTest):
                         while e < obj_len:
                             e += 1
                             c += 1
-                            #time.sleep(15)
                             if e == 1:
                                 self.assertEqual(int(float(self.browser.find_element(By.ID, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text)), k)
                             elif e == obj_len-1:
@@ -132,6 +130,8 @@ class TestSolution(FunctionalTest):
                             elif e == obj_len:
                                 self.assertEqual(int(float(self.browser.find_element(By.ID, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text)), "")
                             else:
+                                time.sleep(30)
+                                print(f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}", "!!")
                                 self.assertEqual(int(float(self.browser.find_element(By.ID, f"matrix-calculation-simple-iteration-method-block-block-step2-5-table-{r}-{c}").text)), element_arr_matrixB[i])
                                 i += 1
                     else:
@@ -158,41 +158,35 @@ class TestSolution(FunctionalTest):
         """
         table_indexes = []
         form_data = {}
-        rows_table_1 = []
-        rows_table_2 = []
         c = 0
+        
         for k, v in tables_data.items():
             if k[5:7] not in table_indexes:
                 c += 1
                 table_indexes.append(k[5:7])
             if c == 1:
-                if k[8:11] not in rows_table_1:
-                    rows_table_1.append(k[8:11])
                 if form_data.get(str(table_indexes[0])) is None:
                     form_data[str(table_indexes[0])] = {}
-                if form_data[str(table_indexes[0])].get(k[8:11]) is None:
-                    form_data[str(table_indexes[0])][k[8:11]] = []
-                form_data[str(table_indexes[0])][k[8:11]].append(v)
+                if form_data[str(table_indexes[0])].get(k[8:12]) is None:
+                    form_data[str(table_indexes[0])][k[8:12]] = []
+                form_data[str(table_indexes[0])][k[8:12]].append(v)
             elif c == 2:
-                if k[8:11] not in rows_table_2:
-                    rows_table_2.append(k[8:11])
                 if form_data.get(str(table_indexes[1])) is None:
                     form_data[str(table_indexes[1])] = {}
-                if form_data[str(table_indexes[1])].get(k[8:11]) is None:
-                    form_data[str(table_indexes[1])][k[8:11]] = []
-                form_data[str(table_indexes[1])][k[8:11]].append(v)
+                if form_data[str(table_indexes[1])].get(k[8:12]) is None:
+                    form_data[str(table_indexes[1])][k[8:12]] = []
+                form_data[str(table_indexes[1])][k[8:12]].append(v)
         return [form_data[str(table_indexes[0])], form_data[str(table_indexes[1])]]
 
 
-    
     def __calculate_iteration(self, matrix_A: dict, matrix_B: dict, k_index: int=0) -> dict:
          """
          expects the matrix elements in the format as matrix has tableXX, that has row1, row2, row3, .., rown
          """
          table = {}
          i = 0
-         x_amount = len(matrix_B["row"])
-         print(x_amount, type(x_amount), "x_amount")
+         x_amount =  len(matrix_B.keys())
+         print(matrix_A, matrix_B)
          for k in matrix_A.keys():
             if not matrix_A.get(k):
                 raise InvalidKeys(message="matrix_A is broken")
@@ -205,19 +199,27 @@ class TestSolution(FunctionalTest):
          elif x_amount == 5:
              table_row = {"x1": {}, "x2": {}, "x3": {}, "x4": {}, "x5": {}}
          while i < k_index: 
-             table[str(i)] = table_row
-             for r in table[str(i)].keys():
+             table_row_copy = copy.deepcopy(table_row)
+             c = 0
+             for r in table_row_copy.keys():
                  res = 0 
-                 for k in matrix_A.keys():
-                     if i == 0:
-                         table[str(i)][r] = matrix_B[k]
-                         continue
+                 if i == 0:
+                     c += 1
+                     for k in matrix_B.keys():
+                         if str(c) in r and str(c) in k:
+
+                            table_row_copy[r] = matrix_B[k][0]
+
+                     continue
+                 for k in matrix_A.keys(): 
                      for v in matrix_A[k]:
-                          if not table[str(i)].get(r):
-                              res += v * table[str(i)][r]
+                          if table_row_copy.get(r):
+                              res += v * table_row_copy[r]
                           else:
                               res += v * matrix_B[k][0]
-                 table[str(i)][r] = res
+                 table_row_copy[r] = res
+             table[str(i)] = table_row_copy
+
              i += 1
          elements_in_row = []
          elements_in_row2 = []
@@ -232,7 +234,6 @@ class TestSolution(FunctionalTest):
              if c == 0:
                  table_row_copy["delta"] = "-"
              if c > 0:
-                print(elements_in_row, elements_in_row2)
                 table_row_copy["delta"] = abs(max(elements_in_row2)-max(elements_in_row)) 
                 elements_in_row = elements_in_row2
                 elements_in_row2 = []
@@ -240,7 +241,7 @@ class TestSolution(FunctionalTest):
              table_row_copy["row_index"] = c + 2
              table[index] = table_row_copy
              c += 1
+
          return table
            
-
 

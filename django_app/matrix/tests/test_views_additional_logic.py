@@ -88,26 +88,24 @@ class SolveBySimpleIterationMethod():
         rows_table_1 = []
         rows_table_2 = []
         c = 0
+        
         for k, v in tables_data.items():
             if k[5:7] not in table_indexes:
                 c += 1
                 table_indexes.append(k[5:7])
+                print(table_indexes, "table_indexes")
             if c == 1:
-                if k[8:11] not in rows_table_1:
-                    rows_table_1.append(k[8:11])
                 if form_data.get(str(table_indexes[0])) is None:
                     form_data[str(table_indexes[0])] = {}
-                if form_data[str(table_indexes[0])].get(k[8:11]) is None:
-                    form_data[str(table_indexes[0])][k[8:11]] = []
-                form_data[str(table_indexes[0])][k[8:11]].append(v)
+                if form_data[str(table_indexes[0])].get(k[8:12]) is None:
+                    form_data[str(table_indexes[0])][k[8:12]] = []
+                form_data[str(table_indexes[0])][k[8:12]].append(v)
             elif c == 2:
-                if k[8:11] not in rows_table_2:
-                    rows_table_2.append(k[8:11])
                 if form_data.get(str(table_indexes[1])) is None:
                     form_data[str(table_indexes[1])] = {}
-                if form_data[str(table_indexes[1])].get(k[8:11]) is None:
-                    form_data[str(table_indexes[1])][k[8:11]] = []
-                form_data[str(table_indexes[1])][k[8:11]].append(v)
+                if form_data[str(table_indexes[1])].get(k[8:12]) is None:
+                    form_data[str(table_indexes[1])][k[8:12]] = []
+                form_data[str(table_indexes[1])][k[8:12]].append(v)
         return [form_data[str(table_indexes[0])], form_data[str(table_indexes[1])]]
 
 
@@ -117,8 +115,8 @@ class SolveBySimpleIterationMethod():
          """
          table = {}
          i = 0
-         x_amount = len(matrix_B["row"])
-         print(x_amount, type(x_amount), "x_amount")
+         x_amount =  len(matrix_B.keys())
+         print(matrix_A, matrix_B)
          for k in matrix_A.keys():
             if not matrix_A.get(k):
                 raise InvalidKeys(message="matrix_A is broken")
@@ -131,23 +129,32 @@ class SolveBySimpleIterationMethod():
          elif x_amount == 5:
              table_row = {"x1": {}, "x2": {}, "x3": {}, "x4": {}, "x5": {}}
          while i < k_index: 
-             table[str(i)] = table_row
-             for r in table[str(i)].keys():
+             table_row_copy = copy.deepcopy(table_row)
+             c = 0
+             for r in table_row_copy.keys():
                  res = 0 
-                 for k in matrix_A.keys():
-                     if i == 0:
-                         table[str(i)][r] = matrix_B[k]
-                         continue
+                 if i == 0:
+                     c += 1
+                     for k in matrix_B.keys():
+                         if str(c) in r and str(c) in k:
+                            print("GOT")
+                            table_row_copy[r] = matrix_B[k][0]
+                     print("STOP")
+                     continue
+                 for k in matrix_A.keys(): 
                      for v in matrix_A[k]:
-                          if not table[str(i)].get(r):
-                              res += v * table[str(i)][r]
+                          if table_row_copy.get(r):
+                              res += v * table_row_copy[r]
                           else:
                               res += v * matrix_B[k][0]
-                 table[str(i)][r] = res
+                 table_row_copy[r] = res
+             table[str(i)] = table_row_copy
+             print("I += 1", table)
              i += 1
          elements_in_row = []
          elements_in_row2 = []
          c = 0
+         print(table, "table")
          for index, table_row in table.items():
              table_row_copy = copy.deepcopy(table_row)
              for value in table_row_copy.values():
@@ -166,5 +173,6 @@ class SolveBySimpleIterationMethod():
              table_row_copy["row_index"] = c + 2
              table[index] = table_row_copy
              c += 1
+
          return table
            
