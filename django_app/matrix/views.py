@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from . import business_logic
 
+
 def main_page(request):
     del request.session
     context = {"row1": 3, "column1": 3, "row2": 3, "column2": 1}

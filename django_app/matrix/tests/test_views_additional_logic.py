@@ -128,33 +128,41 @@ class SolveBySimpleIterationMethod():
              table_row = {"x1": {}, "x2": {}, "x3": {}, "x4": {}}
          elif x_amount == 5:
              table_row = {"x1": {}, "x2": {}, "x3": {}, "x4": {}, "x5": {}}
+         prev_k = None
+         c = 0
+         T = 0
          while i < k_index: 
              table_row_copy = copy.deepcopy(table_row)
              c = 0
+             res_array = []
              for r in table_row_copy.keys():
-                 res = 0 
+                 print(r, "R")
+                 table_row_copy[r] = {}
                  if i == 0:
                      c += 1
                      for k in matrix_B.keys():
                          if str(c) in r and str(c) in k:
-                            print("GOT")
-                            table_row_copy[r] = matrix_B[k][0]
-                     print("STOP")
+                            table_row_copy[r] = round(matrix_B[k][0], 5)
                      continue
-                 for k in matrix_A.keys(): 
-                     for v in matrix_A[k]:
-                          if table_row_copy.get(r):
-                              res += v * table_row_copy[r]
-                          else:
-                              res += v * matrix_B[k][0]
-                 table_row_copy[r] = res
+                 T_arr = []
+                 for k in matrix_A.keys():                   
+                     res = 0        
+                     a = 1
+                     for v in matrix_A[k]:  
+                              res += v * table[prev_k][f"x{a}"]
+                              T_arr.append(f"{v} * {table[prev_k][f"x{a}"]} = {v*table[prev_k][f"x{a}"]}")
+                              a += 1
+                     res += matrix_B[k][0]
+                     T_arr.append(f"added {matrix_B[k][0]} res = {round(res, 5)}")
+                     res_array.append(round(res, 5))
+                 table_row_copy[r] = res_array[c]
+                 c += 1
              table[str(i)] = table_row_copy
-             print("I += 1", table)
+             prev_k = str(i)
              i += 1
          elements_in_row = []
          elements_in_row2 = []
          c = 0
-         print(table, "table")
          for index, table_row in table.items():
              table_row_copy = copy.deepcopy(table_row)
              for value in table_row_copy.values():
@@ -165,14 +173,12 @@ class SolveBySimpleIterationMethod():
              if c == 0:
                  table_row_copy["delta"] = "-"
              if c > 0:
-                print(elements_in_row, elements_in_row2)
-                table_row_copy["delta"] = abs(max(elements_in_row2)-max(elements_in_row)) 
+                table_row_copy["delta"] = round(abs(max(elements_in_row2)-max(elements_in_row)), 5)
                 elements_in_row = elements_in_row2
                 elements_in_row2 = []
              table_row_copy["k"] = c
              table_row_copy["row_index"] = c + 2
              table[index] = table_row_copy
              c += 1
-
+         
          return table
-           
